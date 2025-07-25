@@ -42,4 +42,17 @@ Article:
 {{articleContent}}
 
 Summary:
-Sentiment:`, // Removed the word 
+Sentiment:`,
+});
+
+const summarizeArticleFlow = ai.defineFlow(
+  {
+    name: 'summarizeArticleFlow',
+    inputSchema: SummarizeArticleInputSchema,
+    outputSchema: SummarizeArticleOutputSchema,
+  },
+  async input => {
+    const {output} = await summarizeArticlePrompt(input);
+    return output!;
+  }
+);
