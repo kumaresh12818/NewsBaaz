@@ -1,7 +1,13 @@
 import type { Article } from './types';
 import type { Item } from 'rss-parser';
 
-function extractImageUrl(content: string): string {
+function extractImageUrl(content: string, item: any): string {
+  if (item.enclosure?.url) {
+    return item.enclosure.url;
+  }
+  if (item['media:content']?.['$']?.url) {
+    return item['media:content']['$'].url;
+  }
   const imgRegex = /<img[^>]+src="([^">]+)"/;
   const match = content.match(imgRegex);
   return match ? match[1] : 'https://placehold.co/600x400.png';
@@ -16,7 +22,7 @@ export async function fetchArticles(category: string, lang: string = 'en'): Prom
     const items: (Item & {category: string, source: string})[] = await response.json();
     
     return items.map((item, index) => {
-      const imageUrl = item.enclosure?.url || extractImageUrl(item.content || '');
+      const imageUrl = extractImageUrl(item.content || '', item);
       const summary = item.contentSnippet || 'No summary available.';
       return {
         id: item.guid || item.link || index.toString(),

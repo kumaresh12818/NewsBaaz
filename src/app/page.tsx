@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/select';
 import { fetchArticles } from '@/lib/rss-parser';
 import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
 
 const allCategories: { [lang: string]: string[] } = {
   en: [
@@ -56,6 +57,10 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 
   useEffect(() => {
+    document.documentElement.lang = selectedLanguage;
+  }, [selectedLanguage]);
+
+  useEffect(() => {
     const currentCats = allCategories[selectedLanguage];
     setCategories(currentCats);
     // If the selected category isn't in the new list, update it to the first available one.
@@ -87,7 +92,7 @@ export default function Home() {
 
   return (
     <AppLayout>
-      <div className="flex-1 space-y-8 p-4 md:p-8">
+      <div className={cn("flex-1 space-y-8 p-4 md:p-8", selectedLanguage === 'bn' && 'font-bengali')}>
         <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
           <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-primary">
             {selectedCategory}

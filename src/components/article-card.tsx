@@ -35,7 +35,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
             />
           </div>
         </CardHeader>
-        <CardContent className="p-4 space-y-2">
+        <CardContent className="p-4 space-y-2 break-words">
             <h3 className="font-headline text-xl leading-tight text-foreground group-hover:underline">
               {article.title}
             </h3>
