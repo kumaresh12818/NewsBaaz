@@ -66,7 +66,11 @@ export default function Home() {
 
   useEffect(() => {
     document.documentElement.lang = selectedLanguage;
+    // When language changes, reset the category to the first one of the new language.
+    setSelectedCategory(allCategories[selectedLanguage][0]);
+  }, [selectedLanguage]);
 
+  useEffect(() => {
     const getArticles = async () => {
       setIsLoading(true);
       const fetchedArticles = await fetchArticles(selectedCategory, selectedLanguage);
@@ -76,10 +80,6 @@ export default function Home() {
     getArticles();
   }, [selectedCategory, selectedLanguage]);
 
-  const handleLanguageChange = (lang: string) => {
-    setSelectedLanguage(lang);
-    setSelectedCategory(allCategories[lang][0]);
-  }
 
   const filteredArticles = useMemo(() => {
     return articles.filter((article) => {
@@ -106,7 +106,7 @@ export default function Home() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-             <Select value={selectedLanguage} onValueChange={handleLanguageChange}>
+             <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
                 <SelectTrigger className="w-full md:w-[120px]">
                     <SelectValue placeholder="Language" />
                 </SelectTrigger>
