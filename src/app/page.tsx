@@ -16,42 +16,49 @@ import {
 import { fetchArticles } from '@/lib/rss-parser';
 import { Skeleton } from '@/components/ui/skeleton';
 
+const categories = [
+  'Top Stories',
+  'Recent Stories',
+  'India',
+  'World',
+  'Business',
+  'Sports',
+  'Cricket',
+  'Science',
+  'Education',
+  'Technology',
+];
+
 export default function Home() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('Top Stories');
 
   useEffect(() => {
     const getArticles = async () => {
       setIsLoading(true);
-      const fetchedArticles = await fetchArticles();
+      const fetchedArticles = await fetchArticles(selectedCategory);
       setArticles(fetchedArticles);
       setIsLoading(false);
     };
     getArticles();
-  }, []);
-
-  const categories = useMemo(() => {
-    if (articles.length === 0) return ['All'];
-    return ['All', ...Array.from(new Set(articles.map((a) => a.category)))];
-  }, [articles]);
+  }, [selectedCategory]);
 
   const filteredArticles = useMemo(() => {
     return articles.filter((article) => {
-      const matchesCategory = selectedCategory === 'All' || article.category === selectedCategory;
       const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                             article.summary.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchesCategory && matchesSearch;
+      return matchesSearch;
     });
-  }, [searchTerm, selectedCategory, articles]);
+  }, [searchTerm, articles]);
 
   return (
     <AppLayout>
       <div className="flex-1 space-y-8 p-4 md:p-8">
         <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
           <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-primary">
-            Top Headlines
+            {selectedCategory}
           </h1>
           <div className="flex w-full md:w-auto items-center space-x-2">
             <div className="relative w-full md:w-64">
