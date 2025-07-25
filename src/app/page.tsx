@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { AppLayout } from '@/components/layout/app-layout';
 import { ArticleCard } from '@/components/article-card';
 import type { Article } from '@/lib/types';
@@ -56,8 +56,9 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('en');
   const [selectedCategory, setSelectedCategory] = useState(allCategories['en'][0]);
-  
+
   const categories = allCategories[selectedLanguage];
+  const isFetchingRef = useRef(false);
 
   useEffect(() => {
     document.documentElement.lang = selectedLanguage;
@@ -65,10 +66,22 @@ export default function Home() {
 
   useEffect(() => {
     const getArticles = async () => {
+      if (!selectedCategory || !selectedLanguage || isFetchingRef.current) {
+        return;
+      }
+      
+      isFetchingRef.current = true;
       setIsLoading(true);
-      const fetchedArticles = await fetchArticles(selectedCategory, selectedLanguage);
-      setArticles(fetchedArticles);
-      setIsLoading(false);
+      try {
+        const fetchedArticles = await fetchArticles(selectedCategory, selectedLanguage);
+        setArticles(fetchedArticles);
+      } catch (error) {
+        console.error("Failed to fetch articles:", error);
+        setArticles([]); // Clear articles on error
+      } finally {
+        setIsLoading(false);
+        isFetchingRef.current = false;
+      }
     };
     getArticles();
   }, [selectedCategory, selectedLanguage]);
@@ -81,10 +94,14 @@ export default function Home() {
       return matchesSearch;
     });
   }, [searchTerm, articles]);
-  
+
   const handleLanguageChange = (lang: string) => {
     setSelectedLanguage(lang);
     setSelectedCategory(allCategories[lang][0]);
+  };
+  
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
   };
 
   return (
@@ -116,7 +133,7 @@ export default function Home() {
                     ))}
                 </SelectContent>
             </Select>
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <Select value={selectedCategory} onValueChange={handleCategoryChange}>
               <SelectTrigger className="w-full md:w-[180px]">
                 <SelectValue placeholder="Filter by category" />
               </SelectTrigger>
