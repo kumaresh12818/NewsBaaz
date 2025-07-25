@@ -27,6 +27,12 @@ const nextConfig: NextConfig = {
         hostname: 'static.toiimg.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'timesofindia.indiatimes.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
