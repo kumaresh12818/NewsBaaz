@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -39,13 +40,15 @@ const allCategories: { [lang: string]: string[] } = {
     'Astrology',
   ],
   bn: [
-    'Home Page',
-    'India News',
-    'District News',
+    'Nation',
+    'World',
     'Kolkata',
-    'States',
-    'World News',
+    'Zila',
     'Sports',
+    'Entertainment',
+    'Blog',
+    'Health',
+    'Lifestyle',
   ]
 };
 

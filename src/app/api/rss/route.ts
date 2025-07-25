@@ -1,3 +1,4 @@
+
 import { NextResponse, NextRequest } from 'next/server';
 import Parser from 'rss-parser';
 
@@ -19,13 +20,15 @@ const rssFeeds: { [lang: string]: { [category: string]: string } } = {
     'Astrology': 'https://timesofindia.indiatimes.com/rssfeeds/65857041.cms',
   },
   bn: {
-    'Home Page': 'https://bengali.abplive.com/home/feed',
-    'India News': 'https://bengali.abplive.com/news/india/feed',
-    'District News': 'https://bengali.abplive.com/district/feed',
-    'Kolkata': 'https://bengali.abplive.com/news/kolkata/feed',
-    'States': 'https://bengali.abplive.com/states/feed',
-    'World News': 'https://bengali.abplive.com/news/world/feed',
-    'Sports': 'https://bengali.abplive.com/sports/feed',
+    'Nation': 'http://zeenews.india.com/bengali/rssfeed/nation.xml',
+    'World': 'http://zeenews.india.com/bengali/rssfeed/world.xml',
+    'Kolkata': 'http://zeenews.india.com/bengali/rssfeed/kolkata.xml',
+    'Zila': 'http://zeenews.india.com/bengali/rssfeed/zila.xml',
+    'Sports': 'http://zeenews.india.com/bengali/rssfeed/sports.xml',
+    'Entertainment': 'http://zeenews.india.com/bengali/rssfeed/entertainment.xml',
+    'Blog': 'http://zeenews.india.com/bengali/blog.xml',
+    'Health': 'http://zeenews.india.com/bengali/health.xml',
+    'Lifestyle': 'http://zeenews.india.com/bengali/lifestyle.xml',
   }
 };
 
@@ -51,7 +54,7 @@ export async function GET(request: NextRequest) {
     const feed = await parser.parseURL(feedUrl);
     
     // Add the category and source to each item before returning
-    const source = lang === 'bn' ? 'ABP Ananda' : 'Times of India';
+    const source = lang === 'bn' ? 'ZEE 24 Ghanta' : 'Times of India';
     const itemsWithCategory = feed.items.map(item => ({
       ...item,
       category: finalCategory,

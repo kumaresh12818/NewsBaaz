@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
@@ -33,13 +34,15 @@ const allCategories: { [lang: string]: string[] } = {
     'Astrology',
   ],
   bn: [
-    'Home Page',
-    'India News',
-    'District News',
+    'Nation',
+    'World',
     'Kolkata',
-    'States',
-    'World News',
+    'Zila',
     'Sports',
+    'Entertainment',
+    'Blog',
+    'Health',
+    'Lifestyle',
   ]
 };
 
@@ -67,7 +70,7 @@ export default function Home() {
     if (!currentCats.includes(selectedCategory)) {
       setSelectedCategory(currentCats[0]);
     }
-  }, [selectedLanguage]);
+  }, [selectedLanguage, selectedCategory]);
 
   useEffect(() => {
     // Ensure we have a valid category for the selected language before fetching
