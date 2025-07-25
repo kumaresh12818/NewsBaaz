@@ -60,34 +60,26 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('en');
-  const [categories, setCategories] = useState(allCategories[selectedLanguage]);
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  const [selectedCategory, setSelectedCategory] = useState(allCategories[selectedLanguage][0]);
+  
+  const categories = allCategories[selectedLanguage];
 
   useEffect(() => {
     document.documentElement.lang = selectedLanguage;
-  }, [selectedLanguage]);
 
-  useEffect(() => {
-    const currentCats = allCategories[selectedLanguage];
-    setCategories(currentCats);
-    // If the selected category isn't in the new list, update it to the first available one.
-    if (!currentCats.includes(selectedCategory)) {
-      setSelectedCategory(currentCats[0]);
-    }
-  }, [selectedLanguage, selectedCategory]);
-
-  useEffect(() => {
-    // Ensure we have a valid category for the selected language before fetching
-    if (selectedCategory && allCategories[selectedLanguage].includes(selectedCategory)) {
-      const getArticles = async () => {
-        setIsLoading(true);
-        const fetchedArticles = await fetchArticles(selectedCategory, selectedLanguage);
-        setArticles(fetchedArticles);
-        setIsLoading(false);
-      };
-      getArticles();
-    }
+    const getArticles = async () => {
+      setIsLoading(true);
+      const fetchedArticles = await fetchArticles(selectedCategory, selectedLanguage);
+      setArticles(fetchedArticles);
+      setIsLoading(false);
+    };
+    getArticles();
   }, [selectedCategory, selectedLanguage]);
+
+  const handleLanguageChange = (lang: string) => {
+    setSelectedLanguage(lang);
+    setSelectedCategory(allCategories[lang][0]);
+  }
 
   const filteredArticles = useMemo(() => {
     return articles.filter((article) => {
@@ -114,7 +106,7 @@ export default function Home() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-             <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+             <Select value={selectedLanguage} onValueChange={handleLanguageChange}>
                 <SelectTrigger className="w-full md:w-[120px]">
                     <SelectValue placeholder="Language" />
                 </SelectTrigger>
