@@ -33,21 +33,33 @@ const allCategories: { [lang: string]: string[] } = {
     'Entertainment',
     'Astrology',
   ],
-  bn: [
-    'Nation-And-World',
-    'Bengal',
-    'Kolkata',
-    'Districts',
+  hi: [
+    'India News',
+    'World News',
+    'States',
     'Sports',
-    'Cricket',
-    'Entertainment',
-    'Astrology',
+    'Bollywood',
+    'Television',
+    'Tamil Cinema',
+    'Bhojpuri Cinema',
+    'Astro',
+    'Religion',
+    'Business',
+    'Gadgets',
+    'Life Style',
+    'Health',
+    'Technology',
+    'Education',
+    'Jobs',
+    'Coronavirus',
+    'Agricultures',
+    'GK',
   ],
 };
 
 const languages = [
     { value: 'en', label: 'English' },
-    { value: 'bn', label: 'Bengali' },
+    { value: 'hi', label: 'Hindi' },
 ];
 
 export default function Home() {
@@ -61,20 +73,11 @@ export default function Home() {
   useEffect(() => {
     document.documentElement.lang = selectedLanguage;
 
-    // When language changes, update category to the first valid one for the new language
-    const newCategories = allCategories[selectedLanguage];
-    if (!newCategories.includes(selectedCategory)) {
-        setSelectedCategory(newCategories[0]);
-    }
-  }, [selectedLanguage, selectedCategory]);
-
-  useEffect(() => {
     const getArticles = async () => {
       if (!selectedCategory || !selectedLanguage || isFetchingRef.current) {
         return;
       }
       
-      // Ensure the category is valid for the current language before fetching
       if (!allCategories[selectedLanguage].includes(selectedCategory)) {
         return;
       }
@@ -86,7 +89,7 @@ export default function Home() {
         setArticles(fetchedArticles);
       } catch (error) {
         console.error("Failed to fetch articles:", error);
-        setArticles([]); // Clear articles on error
+        setArticles([]);
       } finally {
         setIsLoading(false);
         isFetchingRef.current = false;
@@ -107,7 +110,7 @@ export default function Home() {
   const handleLanguageChange = (lang: string) => {
     if (lang !== selectedLanguage) {
       setSelectedLanguage(lang);
-      // The category will be updated by the useEffect watching selectedLanguage
+      setSelectedCategory(allCategories[lang][0]);
     }
   };
   
@@ -119,7 +122,7 @@ export default function Home() {
 
   return (
     <AppLayout>
-      <div className={cn("flex-1 space-y-8 p-4 md:p-8", selectedLanguage === 'bn' && 'font-bengali')}>
+      <div className={cn("flex-1 space-y-8 p-4 md:p-8", selectedLanguage === 'hi' && 'font-hindi')}>
         <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
           <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-primary">
             {selectedCategory}

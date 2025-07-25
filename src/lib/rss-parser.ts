@@ -1,15 +1,18 @@
 import type { Article } from './types';
 import type { Item } from 'rss-parser';
 
-function extractImageUrl(content: string, item: any): string {
-  // ZEE 24 Ghanta feed has the image inside the description/content tag
+function extractImageUrl(content: string, item: any, source: string): string {
+  // For ABP Live (Hindi)
+  if (source === 'ABP Live' && item.enclosure?.url) {
+    return item.enclosure.url;
+  }
+  
   if (item.content) {
     const imgRegex = /<img[^>]+src="([^">]+)"/;
     const match = item.content.match(imgRegex);
     if (match) return match[1];
   }
   
-  // For Times of India and other standard feeds
   if (item.enclosure?.url) {
     return item.enclosure.url;
   }
@@ -32,7 +35,7 @@ export async function fetchArticles(category: string, lang: string = 'en'): Prom
     const items: (Item & {category: string, source: string})[] = await response.json();
     
     return items.map((item, index) => {
-      const imageUrl = extractImageUrl(item.content || '', item);
+      const imageUrl = extractImageUrl(item.content || '', item, item.source);
       const summary = item.contentSnippet || 'No summary available.';
       return {
         id: item.guid || item.link || index.toString(),

@@ -19,7 +19,7 @@ export default {
       fontFamily: {
         body: ['Lato', 'sans-serif'],
         headline: ['Bebas Neue', 'sans-serif'],
-        bengali: ['Hind Siliguri', 'sans-serif'],
+        hindi: ['Tiro Devanagari Hindi', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {

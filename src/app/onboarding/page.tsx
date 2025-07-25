@@ -39,26 +39,33 @@ const allCategories: { [lang: string]: string[] } = {
     'Entertainment',
     'Astrology',
   ],
-  bn: [
-    'Nation-And-World',
-    'Bengal',
-    'Kolkata',
-    'Districts',
+  hi: [
+    'India News',
+    'World News',
+    'States',
     'Sports',
-    'Cricket',
-    'Entertainment',
-    'Astrology',
-    'Career',
-    'Pictures',
-    'Videos',
-    'LifeStyle',
+    'Bollywood',
+    'Television',
+    'Tamil Cinema',
+    'Bhojpuri Cinema',
+    'Astro',
+    'Religion',
+    'Business',
+    'Gadgets',
+    'Life Style',
+    'Health',
     'Technology',
+    'Education',
+    'Jobs',
+    'Coronavirus',
+    'Agricultures',
+    'GK',
   ]
 };
 
 const languages = [
     { value: 'en', label: 'English' },
-    { value: 'bn', label: 'Bengali' },
+    { value: 'hi', label: 'Hindi' },
 ];
 
 export default function OnboardingPage() {

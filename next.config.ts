@@ -39,6 +39,24 @@ const nextConfig: NextConfig = {
         hostname: 'images.hindustantimes.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'c.ndtvimg.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'media.assettype.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'feeds.abplive.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
