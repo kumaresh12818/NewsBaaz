@@ -8,6 +8,9 @@ function extractImageUrl(content: string, item: any): string {
   if (item['media:content']?.['$']?.url) {
     return item['media:content']['$'].url;
   }
+  if (item['media:thumbnail']?.['$']?.url) {
+    return item['media:thumbnail']['$'].url;
+  }
   const imgRegex = /<img[^>]+src="([^">]+)"/;
   const match = content.match(imgRegex);
   return match ? match[1] : 'https://placehold.co/600x400.png';
