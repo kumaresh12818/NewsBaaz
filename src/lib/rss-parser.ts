@@ -3,8 +3,14 @@ import type { Item } from 'rss-parser';
 
 function extractImageUrl(content: string, item: any, source: string): string {
   // For ABP Live (Hindi)
-  if (source === 'ABP Live' && item.enclosure?.url) {
-    return item.enclosure.url;
+  if (source === 'ABP Live') {
+    if (item.enclosure?.url) {
+      return item.enclosure.url;
+    }
+    // Fallback for ABP which sometimes has the image in media:content
+    if (item['media:content']?.['$']?.url) {
+      return item['media:content']['$'].url;
+    }
   }
   
   if (item.content) {
