@@ -56,13 +56,17 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('en');
   const [selectedCategory, setSelectedCategory] = useState(allCategories['en'][0]);
-
-  const categories = allCategories[selectedLanguage];
   const isFetchingRef = useRef(false);
 
   useEffect(() => {
     document.documentElement.lang = selectedLanguage;
-  }, [selectedLanguage]);
+
+    // When language changes, update category to the first valid one for the new language
+    const newCategories = allCategories[selectedLanguage];
+    if (!newCategories.includes(selectedCategory)) {
+        setSelectedCategory(newCategories[0]);
+    }
+  }, [selectedLanguage, selectedCategory]);
 
   useEffect(() => {
     const getArticles = async () => {
@@ -70,6 +74,11 @@ export default function Home() {
         return;
       }
       
+      // Ensure the category is valid for the current language before fetching
+      if (!allCategories[selectedLanguage].includes(selectedCategory)) {
+        return;
+      }
+
       isFetchingRef.current = true;
       setIsLoading(true);
       try {
@@ -96,13 +105,17 @@ export default function Home() {
   }, [searchTerm, articles]);
 
   const handleLanguageChange = (lang: string) => {
-    setSelectedLanguage(lang);
-    setSelectedCategory(allCategories[lang][0]);
+    if (lang !== selectedLanguage) {
+      setSelectedLanguage(lang);
+      // The category will be updated by the useEffect watching selectedLanguage
+    }
   };
   
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
   };
+  
+  const categories = allCategories[selectedLanguage];
 
   return (
     <AppLayout>
