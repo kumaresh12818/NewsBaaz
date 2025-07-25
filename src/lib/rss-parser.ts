@@ -2,6 +2,12 @@ import type { Article } from './types';
 import type { Item } from 'rss-parser';
 
 function extractImageUrl(content: string, item: any): string {
+  // ZEE 24 Ghanta feed has the image inside the description tag
+  if (item.content) {
+    const imgRegex = /<img[^>]+src="([^">]+)"/;
+    const match = item.content.match(imgRegex);
+    if (match) return match[1];
+  }
   if (item.enclosure?.url) {
     return item.enclosure.url;
   }
@@ -11,9 +17,8 @@ function extractImageUrl(content: string, item: any): string {
   if (item['media:thumbnail']?.['$']?.url) {
     return item['media:thumbnail']['$'].url;
   }
-  const imgRegex = /<img[^>]+src="([^">]+)"/;
-  const match = content.match(imgRegex);
-  return match ? match[1] : 'https://placehold.co/600x400.png';
+  
+  return 'https://placehold.co/600x400.png';
 }
 
 export async function fetchArticles(category: string, lang: string = 'en'): Promise<Article[]> {
