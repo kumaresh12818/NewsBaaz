@@ -66,9 +66,11 @@ export default function Home() {
 
   useEffect(() => {
     document.documentElement.lang = selectedLanguage;
-    // When language changes, reset the category to the first one of the new language.
-    setSelectedCategory(allCategories[selectedLanguage][0]);
-  }, [selectedLanguage]);
+    const currentCategories = allCategories[selectedLanguage];
+    if (!currentCategories.includes(selectedCategory)) {
+      setSelectedCategory(currentCategories[0]);
+    }
+  }, [selectedLanguage, selectedCategory]);
 
   useEffect(() => {
     const getArticles = async () => {
@@ -77,7 +79,9 @@ export default function Home() {
       setArticles(fetchedArticles);
       setIsLoading(false);
     };
-    getArticles();
+    if (selectedCategory) {
+      getArticles();
+    }
   }, [selectedCategory, selectedLanguage]);
 
 
