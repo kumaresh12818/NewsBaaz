@@ -34,15 +34,19 @@ const allCategories: { [lang: string]: string[] } = {
     'Astrology',
   ],
   bn: [
-    'Nation',
-    'World',
+    'Nation-And-World',
+    'Bengal',
     'Kolkata',
-    'Zila',
+    'Districts',
     'Sports',
+    'Cricket',
     'Entertainment',
-    'Blog',
-    'Health',
-    'Lifestyle',
+    'Astrology',
+    'Career',
+    'Pictures',
+    'Videos',
+    'LifeStyle',
+    'Technology',
   ]
 };
 
