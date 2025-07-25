@@ -2,12 +2,14 @@ import type { Article } from './types';
 import type { Item } from 'rss-parser';
 
 function extractImageUrl(content: string, item: any): string {
-  // ZEE 24 Ghanta feed has the image inside the description tag
+  // ZEE 24 Ghanta feed has the image inside the description/content tag
   if (item.content) {
     const imgRegex = /<img[^>]+src="([^">]+)"/;
     const match = item.content.match(imgRegex);
     if (match) return match[1];
   }
+  
+  // For Times of India and other standard feeds
   if (item.enclosure?.url) {
     return item.enclosure.url;
   }
