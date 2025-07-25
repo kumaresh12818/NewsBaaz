@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { AppLayout } from '@/components/layout/app-layout';
 import { ArticleCard } from '@/components/article-card';
-import { allArticles } from '@/lib/mock-data';
 import type { Article } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
@@ -14,21 +13,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { fetchArticles } from '@/lib/rss-parser';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Home() {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  const categories = useMemo(() => ['All', ...Array.from(new Set(allArticles.map((a) => a.category)))], []);
+  useEffect(() => {
+    const getArticles = async () => {
+      setIsLoading(true);
+      const fetchedArticles = await fetchArticles();
+      setArticles(fetchedArticles);
+      setIsLoading(false);
+    };
+    getArticles();
+  }, []);
+
+  const categories = useMemo(() => {
+    if (articles.length === 0) return ['All'];
+    return ['All', ...Array.from(new Set(articles.map((a) => a.category)))];
+  }, [articles]);
 
   const filteredArticles = useMemo(() => {
-    return allArticles.filter((article) => {
+    return articles.filter((article) => {
       const matchesCategory = selectedCategory === 'All' || article.category === selectedCategory;
       const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                             article.summary.toLowerCase().includes(searchTerm.toLowerCase());
       return matchesCategory && matchesSearch;
     });
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, selectedCategory, articles]);
 
   return (
     <AppLayout>
@@ -61,11 +77,24 @@ export default function Home() {
             </Select>
           </div>
         </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filteredArticles.map((article: Article) => (
-            <ArticleCard key={article.id} article={article} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="space-y-4">
+                <Skeleton className="h-48 w-full" />
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-5/6" />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {filteredArticles.map((article: Article) => (
+              <ArticleCard key={article.id} article={article} />
+            ))}
+          </div>
+        )}
       </div>
     </AppLayout>
   );
