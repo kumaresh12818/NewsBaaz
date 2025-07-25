@@ -39,7 +39,7 @@ const summarizeArticlePrompt = ai.definePrompt({
   prompt: `You are a news article summarizer. Summarize the following article in a concise manner, and determine the sentiment of the article.
 
 Article:
-{{articleContent}}
+{{{articleContent}}}
 
 Summary:
 Sentiment:`,
