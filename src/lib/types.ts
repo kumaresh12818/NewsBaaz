@@ -11,6 +11,7 @@ export type Article = {
   content: string;
   summary: string;
   sentiment: 'Positive' | 'Negative' | 'Neutral';
+  link: string;
 };
 
 export type User = {

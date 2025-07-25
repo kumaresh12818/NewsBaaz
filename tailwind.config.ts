@@ -17,7 +17,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['Manrope', 'sans-serif'],
+        body: ['Lato', 'sans-serif'],
         headline: ['Bebas Neue', 'sans-serif'],
         code: ['monospace'],
       },

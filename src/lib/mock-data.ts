@@ -14,6 +14,7 @@ export const allArticles: Article[] = [
     content: `The year 2024 has been a landmark for technological innovation. From quantum computing breakthroughs to the widespread adoption of AI in daily life, the landscape of technology has shifted dramatically. This article explores the most significant advancements and their potential impact on society. Quantum computing, once a theoretical concept, has seen practical applications emerge, promising to solve complex problems previously thought unsolvable. Meanwhile, AI assistants have become more sophisticated, integrating seamlessly into our homes and workplaces, enhancing productivity and convenience.`,
     summary: 'A look at major tech innovations in 2024, including quantum computing and advanced AI, and their societal impact.',
     sentiment: 'Positive',
+    link: '#',
   },
   {
     id: '2',
@@ -28,6 +29,7 @@ export const allArticles: Article[] = [
     content: `The global economy in 2024 is a mixed bag of challenges and opportunities. While some regions are experiencing robust growth driven by the tech sector, others are grappling with inflation and supply chain disruptions. This analysis delves into the key economic indicators, market trends, and policy changes shaping the world economy. Emerging markets are showing surprising resilience, but geopolitical tensions continue to cast a shadow of uncertainty over international trade.`,
     summary: 'An analysis of 2024\'s global economy, highlighting growth in some areas, challenges like inflation elsewhere, and geopolitical uncertainty.',
     sentiment: 'Neutral',
+    link: '#',
   },
   {
     id: '3',
@@ -42,6 +44,7 @@ export const allArticles: Article[] = [
     content: `Despite increased awareness, 2024 has seen a troubling escalation in environmental crises. From record-breaking heatwaves to unprecedented biodiversity loss, the planet is sending clear signals of distress. This report highlights the most pressing environmental issues, the inadequacy of current global responses, and the urgent need for decisive action. The reliance on fossil fuels remains a primary concern, with renewable energy adoption rates falling short of the required targets to combat climate change effectively.`,
     summary: 'A report on escalating environmental crises in 2024, including extreme weather and biodiversity loss, citing insufficient global action.',
     sentiment: 'Negative',
+    link: '#',
   },
   {
     id: '4',
@@ -56,6 +59,7 @@ export const allArticles: Article[] = [
     content: `Medical science has made extraordinary leaps forward in 2024. Gene-editing technologies like CRISPR are now being used to treat genetic disorders that were once considered incurable. Personalized medicine, tailored to an individual's genetic makeup, is becoming a reality, offering more effective treatments with fewer side effects. Furthermore, vaccine development has accelerated, providing new tools to combat infectious diseases. These advancements promise a healthier future for humanity.`,
     summary: 'An overview of 2024 medical breakthroughs, including gene-editing for genetic disorders and the rise of personalized medicine.',
     sentiment: 'Positive',
+    link: '#',
   },
   {
     id: '5',
@@ -70,6 +74,7 @@ export const allArticles: Article[] = [
     content: `A new space race is upon us, but this time it\'s a collaborative and commercial endeavor. In 2024, private companies and national space agencies are working together on ambitious missions to the Moon, Mars, and beyond. This article covers the latest rocket technologies, the establishment of lunar bases, and the search for extraterrestrial life. The renewed vigor in space exploration is not just about discovery but also about creating a multi-planetary future for humanity.`,
     summary: '2024 marks a new era in space exploration with public-private partnerships aiming for the Moon and Mars, driving new technology.',
     sentiment: 'Positive',
+    link: '#',
   },
   {
     id: '6',
@@ -84,6 +89,7 @@ export const allArticles: Article[] = [
     content: `Remote work is no longer a temporary measure but a permanent fixture of the modern workforce. In 2024, companies are grappling with the challenges of a hybrid model, from maintaining company culture to ensuring cybersecurity. This piece examines the tools, strategies, and policies that are defining the future of work. While flexibility is a major benefit, issues of digital presenteeism and burnout are becoming more prominent, requiring new management approaches.`,
     summary: 'A look at the permanent shift to remote and hybrid work in 2024, exploring challenges in culture, security, and employee well-being.',
     sentiment: 'Neutral',
+    link: '#',
   },
   {
     id: '7',
@@ -98,6 +104,7 @@ export const allArticles: Article[] = [
     content: `Artificial intelligence is carving out a new frontier in the creative arts. In 2024, AI algorithms are not just tools but collaborators, generating stunning visual art, composing music, and writing poetry. This exploration delves into the world of generative art, the philosophical questions it raises about creativity and authorship, and how artists are using AI to push the boundaries of their craft. The art market is slowly beginning to recognize and value AI-generated pieces.`,
     summary: 'Exploring how AI is revolutionizing the art world in 2024, from generative visuals to musical composition, and the questions it poses.',
     sentiment: 'Positive',
+    link: '#',
   },
   {
     id: '8',
@@ -112,6 +119,7 @@ export const allArticles: Article[] = [
     content: `The fragility of our global supply chains was once again exposed in 2024. A series of seemingly unrelated events—a shipping lane blockage, a factory fire, and a labor strike—caused a domino effect, leading to widespread shortages and price hikes. This investigative report unpacks the systemic risks in our just-in-time delivery systems and explores the push towards deglobalization and regionalized manufacturing as potential solutions. The report argues that resilience must be prioritized over efficiency.`,
     summary: 'An investigative report on how recent events exposed the fragility of global supply chains, leading to a push for more resilient, regionalized systems.',
     sentiment: 'Negative',
+    link: '#',
   },
 ];
 

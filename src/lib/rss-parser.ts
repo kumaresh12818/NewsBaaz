@@ -30,6 +30,7 @@ export async function fetchArticles(): Promise<Article[]> {
         content: item.contentSnippet || item.content || 'No content available.',
         summary: item.contentSnippet || 'No summary available.',
         sentiment: 'Neutral', // Placeholder sentiment
+        link: item.link || '#',
       };
     });
   } catch (error) {
