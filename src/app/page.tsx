@@ -42,12 +42,7 @@ const allCategories: { [lang: string]: string[] } = {
     'Cricket',
     'Entertainment',
     'Astrology',
-    'Career',
-    'Pictures',
-    'Videos',
-    'LifeStyle',
-    'Technology',
-  ]
+  ],
 };
 
 const languages = [
@@ -92,6 +87,11 @@ export default function Home() {
       return matchesSearch;
     });
   }, [searchTerm, articles]);
+  
+  const handleLanguageChange = (lang: string) => {
+    setSelectedLanguage(lang);
+    setSelectedCategory(allCategories[lang][0]);
+  };
 
   return (
     <AppLayout>
@@ -110,7 +110,7 @@ export default function Home() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-             <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+             <Select value={selectedLanguage} onValueChange={handleLanguageChange}>
                 <SelectTrigger className="w-full md:w-[120px]">
                     <SelectValue placeholder="Language" />
                 </SelectTrigger>
