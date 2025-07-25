@@ -31,11 +31,17 @@ const categories = [
   'Astrology',
 ];
 
+const languages = [
+    { value: 'en', label: 'English' },
+    // More languages to be added later
+];
+
 export default function Home() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Top Stories');
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
 
   useEffect(() => {
     const getArticles = async () => {
@@ -72,6 +78,18 @@ export default function Home() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+             <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                <SelectTrigger className="w-full md:w-[120px]">
+                    <SelectValue placeholder="Language" />
+                </SelectTrigger>
+                <SelectContent>
+                    {languages.map((lang) => (
+                    <SelectItem key={lang.value} value={lang.value}>
+                        {lang.label}
+                    </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
               <SelectTrigger className="w-full md:w-[180px]">
                 <SelectValue placeholder="Filter by category" />
