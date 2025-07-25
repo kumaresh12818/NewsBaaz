@@ -17,8 +17,9 @@ export async function fetchArticles(category: string, lang: string = 'en'): Prom
     
     return items.map((item, index) => {
       const imageUrl = item.enclosure?.url || extractImageUrl(item.content || '');
+      const summary = item.contentSnippet || 'No summary available.';
       return {
-        id: item.guid || index.toString(),
+        id: item.guid || item.link || index.toString(),
         slug: item.link ? new URL(item.link).pathname.split('/').pop()! : `article-${index}`,
         title: item.title || 'No title',
         author: item.creator || item.source,
@@ -28,7 +29,7 @@ export async function fetchArticles(category: string, lang: string = 'en'): Prom
         imageUrl: imageUrl,
         imageHint: 'news article',
         content: item.contentSnippet || item.content || 'No content available.',
-        summary: item.contentSnippet || 'No summary available.',
+        summary: summary,
         sentiment: 'Neutral', // Placeholder sentiment
         link: item.link || '#',
       };

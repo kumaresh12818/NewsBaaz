@@ -58,25 +58,29 @@ export default function Home() {
   useEffect(() => {
     const currentCats = allCategories[selectedLanguage];
     setCategories(currentCats);
+    // If the selected category isn't in the new list, update it to the first available one.
     if (!currentCats.includes(selectedCategory)) {
       setSelectedCategory(currentCats[0]);
     }
-  }, [selectedLanguage, selectedCategory]);
+  }, [selectedLanguage]);
 
   useEffect(() => {
-    const getArticles = async () => {
-      setIsLoading(true);
-      const fetchedArticles = await fetchArticles(selectedCategory, selectedLanguage);
-      setArticles(fetchedArticles);
-      setIsLoading(false);
-    };
-    getArticles();
+    // Ensure we have a valid category for the selected language before fetching
+    if (selectedCategory && allCategories[selectedLanguage].includes(selectedCategory)) {
+      const getArticles = async () => {
+        setIsLoading(true);
+        const fetchedArticles = await fetchArticles(selectedCategory, selectedLanguage);
+        setArticles(fetchedArticles);
+        setIsLoading(false);
+      };
+      getArticles();
+    }
   }, [selectedCategory, selectedLanguage]);
 
   const filteredArticles = useMemo(() => {
     return articles.filter((article) => {
       const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            article.summary.toLowerCase().includes(searchTerm.toLowerCase());
+                            (article.summary && article.summary.toLowerCase().includes(searchTerm.toLowerCase()));
       return matchesSearch;
     });
   }, [searchTerm, articles]);
