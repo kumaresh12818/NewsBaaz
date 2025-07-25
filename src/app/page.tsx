@@ -25,8 +25,10 @@ const categories = [
   'Sports',
   'Cricket',
   'Science',
-  'Education',
   'Technology',
+  'Education',
+  'Entertainment',
+  'Astrology',
 ];
 
 export default function Home() {

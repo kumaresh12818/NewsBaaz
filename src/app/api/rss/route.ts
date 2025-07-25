@@ -8,12 +8,14 @@ const rssFeeds: { [key: string]: string } = {
   'Recent Stories': 'http://timesofindia.indiatimes.com/rssfeedmostrecent.cms',
   'India': 'http://timesofindia.indiatimes.com/rssfeeds/-2128936835.cms',
   'World': 'http://timesofindia.indiatimes.com/rssfeeds/296589292.cms',
+  'Business': 'http://timesofindia.indiatimes.com/rssfeeds/1898055.cms',
   'Sports': 'http://timesofindia.indiatimes.com/rssfeeds/4719148.cms',
   'Cricket': 'http://timesofindia.indiatimes.com/rssfeeds/54829575.cms',
+  'Science': 'http://timesofindia.indiatimes.com/rssfeeds/-2128672765.cms',
+  'Technology': 'http://timesofindia.indiatimes.com/rssfeeds/66949542.cms',
   'Education': 'http://timesofindia.indiatimes.com/rssfeeds/913168846.cms',
-  'Science': 'http://timesofindia.indiatimes.com/rssfeeds/5123168.cms',
-  'Business': 'http://timesofindia.indiatimes.com/rssfeeds/1898055.cms',
-  'Technology': 'http://timesofindia.indiatimes.com/rssfeeds/671208.cms',
+  'Entertainment': 'http://timesofindia.indiatimes.com/rssfeeds/1081479906.cms',
+  'Astrology': 'https://timesofindia.indiatimes.com/rssfeeds/65857041.cms',
 };
 
 export async function GET(request: NextRequest) {
