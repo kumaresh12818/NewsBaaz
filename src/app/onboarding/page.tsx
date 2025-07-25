@@ -23,30 +23,46 @@ import { Label } from '@/components/ui/label';
 import { Newspaper } from 'lucide-react';
 import Link from 'next/link';
 
-const categories = [
-  'Top Stories',
-  'Recent Stories',
-  'India',
-  'World',
-  'Business',
-  'Sports',
-  'Cricket',
-  'Science',
-  'Technology',
-  'Education',
-  'Entertainment',
-  'Astrology',
-];
+const allCategories: { [lang: string]: string[] } = {
+  en: [
+    'Top Stories',
+    'Recent Stories',
+    'India',
+    'World',
+    'Business',
+    'Sports',
+    'Cricket',
+    'Science',
+    'Technology',
+    'Education',
+    'Entertainment',
+    'Astrology',
+  ],
+  bn: [
+    'Home Page',
+    'India News',
+    'District News',
+    'Kolkata',
+    'States',
+    'World News',
+    'Sports',
+  ]
+};
 
 const languages = [
     { value: 'en', label: 'English' },
-    // More will be added later
+    { value: 'bn', label: 'Bengali' },
 ];
 
 export default function OnboardingPage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState('en');
   const router = useRouter();
+
+  const handleLanguageChange = (language: string) => {
+    setSelectedLanguage(language);
+    setSelectedCategories([]); // Reset categories when language changes
+  };
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategories((prev) =>
@@ -62,6 +78,8 @@ export default function OnboardingPage() {
     console.log('Selected Language:', selectedLanguage);
     router.push('/');
   };
+  
+  const currentCategories = allCategories[selectedLanguage] || [];
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
@@ -82,7 +100,7 @@ export default function OnboardingPage() {
                 <CardContent className="space-y-8">
                     <div className="space-y-4">
                         <Label className="text-lg font-semibold">Choose your language</Label>
-                        <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                        <Select value={selectedLanguage} onValueChange={handleLanguageChange}>
                             <SelectTrigger className="w-full md:w-[200px]">
                                 <SelectValue placeholder="Language" />
                             </SelectTrigger>
@@ -99,7 +117,7 @@ export default function OnboardingPage() {
                     <div className="space-y-4">
                         <Label className="text-lg font-semibold">Select your favorite categories</Label>
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            {categories.map((category) => (
+                            {currentCategories.map((category) => (
                                 <div key={category} className="flex items-center space-x-2">
                                     <Checkbox
                                         id={category}

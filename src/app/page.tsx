@@ -16,42 +16,62 @@ import {
 import { fetchArticles } from '@/lib/rss-parser';
 import { Skeleton } from '@/components/ui/skeleton';
 
-const categories = [
-  'Top Stories',
-  'Recent Stories',
-  'India',
-  'World',
-  'Business',
-  'Sports',
-  'Cricket',
-  'Science',
-  'Technology',
-  'Education',
-  'Entertainment',
-  'Astrology',
-];
+const allCategories: { [lang: string]: string[] } = {
+  en: [
+    'Top Stories',
+    'Recent Stories',
+    'India',
+    'World',
+    'Business',
+    'Sports',
+    'Cricket',
+    'Science',
+    'Technology',
+    'Education',
+    'Entertainment',
+    'Astrology',
+  ],
+  bn: [
+    'Home Page',
+    'India News',
+    'District News',
+    'Kolkata',
+    'States',
+    'World News',
+    'Sports',
+  ]
+};
 
 const languages = [
     { value: 'en', label: 'English' },
-    // More languages to be added later
+    { value: 'bn', label: 'Bengali' },
 ];
 
 export default function Home() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Top Stories');
   const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [categories, setCategories] = useState(allCategories[selectedLanguage]);
+  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+
+  useEffect(() => {
+    const currentCats = allCategories[selectedLanguage];
+    setCategories(currentCats);
+    if (!currentCats.includes(selectedCategory)) {
+      setSelectedCategory(currentCats[0]);
+    }
+  }, [selectedLanguage, selectedCategory]);
 
   useEffect(() => {
     const getArticles = async () => {
       setIsLoading(true);
-      const fetchedArticles = await fetchArticles(selectedCategory);
+      const fetchedArticles = await fetchArticles(selectedCategory, selectedLanguage);
       setArticles(fetchedArticles);
       setIsLoading(false);
     };
     getArticles();
-  }, [selectedCategory]);
+  }, [selectedCategory, selectedLanguage]);
 
   const filteredArticles = useMemo(() => {
     return articles.filter((article) => {
