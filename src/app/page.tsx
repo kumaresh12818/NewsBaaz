@@ -55,17 +55,13 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('en');
-  const [selectedCategory, setSelectedCategory] = useState(allCategories[selectedLanguage][0]);
+  const [selectedCategory, setSelectedCategory] = useState(allCategories['en'][0]);
   
   const categories = allCategories[selectedLanguage];
 
   useEffect(() => {
     document.documentElement.lang = selectedLanguage;
-    const currentCategories = allCategories[selectedLanguage];
-    if (!currentCategories.includes(selectedCategory)) {
-      setSelectedCategory(currentCategories[0]);
-    }
-  }, [selectedLanguage, selectedCategory]);
+  }, [selectedLanguage]);
 
   useEffect(() => {
     const getArticles = async () => {
@@ -74,9 +70,7 @@ export default function Home() {
       setArticles(fetchedArticles);
       setIsLoading(false);
     };
-    if (selectedCategory) {
-      getArticles();
-    }
+    getArticles();
   }, [selectedCategory, selectedLanguage]);
 
 
