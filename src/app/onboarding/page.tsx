@@ -76,7 +76,7 @@ export default function OnboardingPage() {
     };
     localStorage.setItem('userPreferences', JSON.stringify(preferences));
     setGlobalLanguage(selectedLang);
-    router.push('/my-feed');
+    router.push('/');
   };
   
   return (

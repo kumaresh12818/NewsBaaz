@@ -64,11 +64,26 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to my-feed if preferences are set
-    if (typeof window !== 'undefined' && localStorage.getItem('userPreferences')) {
-      router.replace('/my-feed');
+    // On first load for a guest, if no preferences are set,
+    // they see the default news feed. If they've onboarded,
+    // their language preference is loaded by LanguageProvider.
+    const storedPrefs = localStorage.getItem('userPreferences');
+    if (storedPrefs) {
+      const parsedPrefs = JSON.parse(storedPrefs);
+      if (parsedPrefs.lang && parsedPrefs.lang !== selectedLang) {
+        setGlobalLang(parsedPrefs.lang);
+      }
+      if (parsedPrefs.categories && parsedPrefs.categories.length > 0) {
+        // You could optionally set the default category from user prefs,
+        // but for now, we'll just respect the language.
+        const newCategories = allCategories[parsedPrefs.lang];
+        setCategories(newCategories);
+        if (!newCategories.includes(selectedCategory)) {
+          setSelectedCategory(newCategories[0]);
+        }
+      }
     }
-  }, [router]);
+  }, []);
   
   useEffect(() => {
     const newCategories = allCategories[selectedLang];
@@ -80,9 +95,8 @@ export default function Home() {
       categoryToFetch = newCategories[0];
       setSelectedCategory(categoryToFetch);
     } else {
-        // This 'else' is important to trigger a fetch when language changes but category is valid.
         const getArticles = async () => {
-          if (refreshTrigger === 0) { // Only show full loading skeleton on initial load
+          if (refreshTrigger === 0) {
             setIsLoading(true);
           } else {
             setIsRefreshing(true);
@@ -110,14 +124,6 @@ export default function Home() {
     }
     
   }, [selectedLang, selectedCategory, refreshTrigger, toast]);
-
-  // This effect handles the case where the category is changed and is now invalid for the new language
-  useEffect(() => {
-      const newCategories = allCategories[selectedLang];
-      if (!newCategories.includes(selectedCategory)) {
-          setSelectedCategory(newCategories[0]);
-      }
-  }, [selectedLang, selectedCategory]);
 
   const handleRefresh = () => {
     setRefreshTrigger(t => t + 1);
