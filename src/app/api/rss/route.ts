@@ -9,6 +9,7 @@ const rssFeeds: { [lang: string]: { [category: string]: string } } = {
     'Top Stories': 'http://timesofindia.indiatimes.com/rssfeedstopstories.cms',
     'Recent Stories': 'http://timesofindia.indiatimes.com/rssfeedmostrecent.cms',
     'India': 'http://timesofindia.indiatimes.com/rssfeeds/-2128936835.cms',
+    'KOLKATA': 'http://timesofindia.indiatimes.com/rssfeeds/-2128830821.cms',
     'World': 'http://timesofindia.indiatimes.com/rssfeeds/296589292.cms',
     'Business': 'http://timesofindia.indiatimes.com/rssfeeds/1898055.cms',
     'Sports': 'http://timesofindia.indiatimes.com/rssfeeds/4719148.cms',
@@ -18,7 +19,6 @@ const rssFeeds: { [lang: string]: { [category: string]: string } } = {
     'Education': 'http://timesofindia.indiatimes.com/rssfeeds/913168846.cms',
     'Entertainment': 'http://timesofindia.indiatimes.com/rssfeeds/1081479906.cms',
     'Astrology': 'https://timesofindia.indiatimes.com/rssfeeds/65857041.cms',
-    'KOLKATA': 'http://timesofindia.indiatimes.com/rssfeeds/-2128830821.cms',
   },
   bn: {
     'India News': 'https://bengali.abplive.com/news/india/feed',

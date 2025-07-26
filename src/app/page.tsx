@@ -23,6 +23,7 @@ const allCategories: { [lang: string]: string[] } = {
     'Top Stories',
     'Recent Stories',
     'India',
+    'KOLKATA',
     'World',
     'Business',
     'Sports',
@@ -32,7 +33,6 @@ const allCategories: { [lang: string]: string[] } = {
     'Education',
     'Entertainment',
     'Astrology',
-    'KOLKATA',
   ],
   bn: [
     'India News',
@@ -56,25 +56,16 @@ export default function Home() {
   const [categories, setCategories] = useState(allCategories[selectedLang]);
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   
-  const isInitialMount = useRef(true);
-
   useEffect(() => {
     const newCategories = allCategories[selectedLang];
     setCategories(newCategories);
-    
-    if (isInitialMount.current || !newCategories.includes(selectedCategory)) {
+    if (!newCategories.includes(selectedCategory)) {
       setSelectedCategory(newCategories[0]);
     }
-    isInitialMount.current = false;
   }, [selectedLang]);
 
   useEffect(() => {
     const getArticles = async () => {
-      if (!allCategories[selectedLang].includes(selectedCategory)) {
-        setSelectedCategory(allCategories[selectedLang][0]);
-        return;
-      }
-
       setIsLoading(true);
       try {
         const fetchedArticles = await fetchArticles(selectedCategory, selectedLang);

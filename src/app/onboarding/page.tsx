@@ -24,6 +24,7 @@ const allCategories: { [lang: string]: string[] } = {
     'Top Stories',
     'Recent Stories',
     'India',
+    'KOLKATA',
     'World',
     'Business',
     'Sports',
@@ -33,7 +34,6 @@ const allCategories: { [lang: string]: string[] } = {
     'Education',
     'Entertainment',
     'Astrology',
-    'KOLKATA',
   ],
   bn: [
     'India News',
