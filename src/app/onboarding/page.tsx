@@ -39,12 +39,12 @@ export default function OnboardingPage() {
             <div className="flex justify-center mb-6">
                 <Link href="/" className="flex items-center gap-2 font-headline text-3xl tracking-wider text-primary">
                 <Newspaper className="h-8 w-8" />
-                <span>NewsBlend</span>
+                <span>NewsBaaz</span>
                 </Link>
             </div>
             <Card className="glass">
                 <CardHeader>
-                    <CardTitle className="text-3xl font-headline tracking-wide">Welcome to NewsBlend!</CardTitle>
+                    <CardTitle className="text-3xl font-headline tracking-wide">Welcome to NewsBaaz!</CardTitle>
                     <CardDescription>
                         Let's personalize your news feed. Select your language.
                     </CardDescription>

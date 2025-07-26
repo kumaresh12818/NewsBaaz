@@ -8,7 +8,7 @@ import { BookmarkProvider } from '@/context/bookmark-context';
 import { UserProvider } from '@/context/user-context';
 
 export const metadata: Metadata = {
-  title: 'NewsBlend',
+  title: 'NewsBaaz',
   description: 'Your daily digest of blended news.',
 };
 
@@ -27,7 +27,7 @@ export default function RootLayout({
       <body className="font-body antialiased overflow-x-hidden">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >

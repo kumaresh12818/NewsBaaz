@@ -24,7 +24,7 @@ export function SidebarNav({ isMobile = false }: { isMobile?: boolean }) {
         <div className="flex h-14 items-center justify-center p-4 lg:justify-start">
           <Link href="/" className="flex items-center gap-2 font-headline text-2xl tracking-wider text-primary">
             <Newspaper className="h-7 w-7" />
-            <span className="hidden lg:block">NewsBlend</span>
+            <span className="hidden lg:block">NewsBaaz</span>
           </Link>
         </div>
       )}

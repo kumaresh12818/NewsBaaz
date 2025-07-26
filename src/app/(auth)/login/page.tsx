@@ -55,7 +55,7 @@ export default function LoginPage() {
        <div className="flex justify-center mb-6">
         <Link href="/" className="flex items-center gap-2 font-headline text-3xl tracking-wider text-primary">
           <Newspaper className="h-8 w-8" />
-          <span>NewsBlend</span>
+          <span>NewsBaaz</span>
         </Link>
       </div>
       <Card className="glass">

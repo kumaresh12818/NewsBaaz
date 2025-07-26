@@ -64,7 +64,7 @@ export function AppHeader() {
       <div className="hidden md:flex flex-1 items-center">
         <Link href="/" className="flex items-center gap-2 font-headline text-2xl tracking-wider text-primary">
           <Newspaper className="h-7 w-7" />
-          <span>NewsBlend</span>
+          <span>NewsBaaz</span>
         </Link>
       </div>
       
