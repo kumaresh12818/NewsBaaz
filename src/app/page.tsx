@@ -57,6 +57,7 @@ export default function Home() {
   const isFetchingRef = useRef(false);
 
   useEffect(() => {
+    // When language changes, update categories and reset selected category
     const newCategories = allCategories[selectedLang];
     setCategories(newCategories);
     setSelectedCategory(newCategories[0]);
@@ -64,7 +65,14 @@ export default function Home() {
 
   useEffect(() => {
     const getArticles = async () => {
-      if (!selectedCategory || !selectedLang || isFetchingRef.current) {
+      // Don't fetch if category isn't set or if we're already fetching
+      if (!selectedCategory || isFetchingRef.current) {
+        return;
+      }
+
+      // Ensure the selected category is valid for the current language
+      if (!allCategories[selectedLang].includes(selectedCategory)) {
+        // This can happen during language transition, just wait for the next render
         return;
       }
 
