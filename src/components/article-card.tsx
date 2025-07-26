@@ -56,7 +56,7 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
       toast({
         variant: 'destructive',
         title: 'Summarization Failed',
-        description: 'This article does not have enough content to summarize.',
+        description: 'AI is not supported in this article.',
       });
       return;
     }
