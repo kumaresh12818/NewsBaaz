@@ -21,7 +21,7 @@ export default function MyFeedPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const { toast } = useToast();
-  const [preferences, setPreferences] = useState({ lang: selectedLang, categories: [] });
+  const [preferences, setPreferences] = useState<{ lang: string, categories: string[] }>({ lang: selectedLang, categories: [] });
 
   useEffect(() => {
     const storedPrefs = localStorage.getItem('userPreferences');
@@ -32,7 +32,7 @@ export default function MyFeedPage() {
         handleLanguageChange(parsedPrefs.lang);
       }
     }
-  }, []);
+  }, [handleLanguageChange, selectedLang]);
 
   useEffect(() => {
     const getArticles = async () => {
@@ -54,13 +54,16 @@ export default function MyFeedPage() {
         const results = await Promise.all(promises);
         const combinedArticles = results.flat();
         
-        combinedArticles.sort((a, b) => {
+        // Remove duplicates
+        const uniqueArticles = Array.from(new Map(combinedArticles.map(item => [item.id, item])).values());
+        
+        uniqueArticles.sort((a, b) => {
           const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
           const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
           return dateB - dateA;
         });
 
-        setArticles(combinedArticles);
+        setArticles(uniqueArticles);
 
         if (refreshTrigger > 0) {
           toast({ title: "Feed updated!" });
@@ -75,11 +78,11 @@ export default function MyFeedPage() {
       }
     };
 
-    if (preferences.lang) {
+    if (preferences.lang && preferences.categories.length > 0) {
       getArticles();
     }
     
-  }, [preferences, refreshTrigger]);
+  }, [preferences, refreshTrigger, toast]);
 
   const handleRefresh = () => {
     setRefreshTrigger(t => t + 1);
