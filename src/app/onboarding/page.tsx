@@ -12,67 +12,21 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
 import { Newspaper, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import { useLanguage } from '@/context/language-context';
-
-const allCategories: { [lang: string]: string[] } = {
-  en: [
-    'Top Stories',
-    'Recent Stories',
-    'India',
-    'KOLKATA',
-    'World',
-    'Business',
-    'Sports',
-    'Cricket',
-    'Science',
-    'Technology',
-    'Education',
-    'Entertainment',
-    'Astrology',
-  ],
-  bn: [
-    'India News',
-    'District News',
-    'Kolkata',
-    'States',
-    'World News',
-    'Sports',
-    'ENTERTAINMENT',
-    'Astro',
-    'Business',
-  ]
-};
 
 export default function OnboardingPage() {
   const [selectedLang, setSelectedLang] = useState('en');
-  const [categories, setCategories] = useState(allCategories[selectedLang]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const router = useRouter();
   const { handleLanguageChange: setGlobalLanguage } = useLanguage();
-
-  const handleLanguageChange = (lang: string) => {
-    setSelectedLang(lang);
-    setCategories(allCategories[lang]);
-    setSelectedCategories([]); // Reset selected categories when language changes
-  };
-
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
-  };
 
   const handleFinish = () => {
     const preferences = {
         lang: selectedLang,
-        categories: selectedCategories
+        categories: []
     };
     localStorage.setItem('userPreferences', JSON.stringify(preferences));
     setGlobalLanguage(selectedLang);
@@ -92,7 +46,7 @@ export default function OnboardingPage() {
                 <CardHeader>
                     <CardTitle className="text-3xl font-headline tracking-wide">Welcome to NewsBlend!</CardTitle>
                     <CardDescription>
-                        Let's personalize your news feed. Select your language and favorite categories.
+                        Let's personalize your news feed. Select your language.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-8">
@@ -103,7 +57,7 @@ export default function OnboardingPage() {
                         </Label>
                         <RadioGroup
                             defaultValue="en"
-                            onValueChange={handleLanguageChange}
+                            onValueChange={setSelectedLang}
                             className="flex space-x-4"
                         >
                             <div className="flex items-center space-x-2">
@@ -116,30 +70,9 @@ export default function OnboardingPage() {
                             </div>
                         </RadioGroup>
                     </div>
-
-                    <div className="space-y-4">
-                        <Label className="text-lg font-semibold">Select your favorite categories</Label>
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            {categories.map((category) => (
-                                <div key={category} className="flex items-center space-x-2">
-                                    <Checkbox
-                                        id={category}
-                                        checked={selectedCategories.includes(category)}
-                                        onCheckedChange={() => handleCategoryChange(category)}
-                                    />
-                                    <Label
-                                        htmlFor={category}
-                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                    >
-                                        {category}
-                                    </Label>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
                 </CardContent>
                 <CardFooter>
-                    <Button onClick={handleFinish} className="w-full md:w-auto" size="lg" disabled={selectedCategories.length === 0}>
+                    <Button onClick={handleFinish} className="w-full md:w-auto" size="lg">
                         Finish Setup & Read News
                     </Button>
                 </CardFooter>

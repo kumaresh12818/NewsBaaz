@@ -34,7 +34,7 @@ export default function SignupPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: fullName });
       toast({ title: 'Account created successfully!' });
-      router.push('/onboarding');
+      router.push('/');
     } catch (error: any) {
       toast({
         variant: 'destructive',
