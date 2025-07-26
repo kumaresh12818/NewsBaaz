@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { AppLayout } from '@/components/layout/app-layout';
 import { ArticleCard } from '@/components/article-card';
 import type { Article } from '@/lib/types';
@@ -25,69 +25,56 @@ export default function MyFeedPage() {
   const { toast } = useToast();
   const [preferences, setPreferences] = useState<{ lang: string, categories: string[] } | null>(null);
 
-  useEffect(() => {
+  const loadAndFetchArticles = useCallback(async () => {
     const storedPrefs = localStorage.getItem('userPreferences');
-    if (storedPrefs) {
-      const parsedPrefs = JSON.parse(storedPrefs);
-      setPreferences(parsedPrefs);
-      // We set the language in the context, and the article fetching will be triggered by the language change effect
-      handleLanguageChange(parsedPrefs.lang);
-    } else {
-        // If there are no preferences, we shouldn't be on this page.
-        // Redirect to onboarding to set preferences.
-        router.replace('/onboarding');
+    if (!storedPrefs) {
+      router.replace('/onboarding');
+      return;
     }
-  }, [router]); // Only run on mount to get preferences
 
+    const parsedPrefs = JSON.parse(storedPrefs);
+    setPreferences(parsedPrefs);
+    handleLanguageChange(parsedPrefs.lang);
+
+    if (refreshTrigger === 0) {
+      setIsLoading(true);
+    } else {
+      setIsRefreshing(true);
+    }
+
+    try {
+      const promises = parsedPrefs.categories.map((category: string) => 
+        fetchArticles(category, parsedPrefs.lang, 'news')
+      );
+      const results = await Promise.all(promises);
+      const combinedArticles = results.flat();
+      
+      const uniqueArticles = Array.from(new Map(combinedArticles.map(item => [item.link, item])).values());
+      
+      uniqueArticles.sort((a, b) => {
+        const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+        const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+        return dateB - dateA;
+      });
+
+      setArticles(uniqueArticles);
+
+      if (refreshTrigger > 0) {
+        toast({ title: "Feed updated!" });
+      }
+    } catch (error) {
+      console.error("Failed to fetch articles:", error);
+      setArticles([]);
+      toast({ variant: "destructive", title: "Error", description: "Failed to fetch articles." });
+    } finally {
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
+  }, [router, handleLanguageChange, refreshTrigger, toast]);
 
   useEffect(() => {
-    const getArticles = async () => {
-      // We need both preferences and for the language context to be updated.
-      if (!preferences || preferences.lang !== selectedLang || preferences.categories.length === 0) {
-        if(!preferences) setIsLoading(false);
-        return;
-      }
-      
-      if (refreshTrigger === 0) {
-        setIsLoading(true);
-      } else {
-        setIsRefreshing(true);
-      }
-
-      try {
-        const promises = preferences.categories.map((category: string) => 
-          fetchArticles(category, preferences.lang, 'news')
-        );
-        const results = await Promise.all(promises);
-        const combinedArticles = results.flat();
-        
-        // Remove duplicates based on the link
-        const uniqueArticles = Array.from(new Map(combinedArticles.map(item => [item.link, item])).values());
-        
-        uniqueArticles.sort((a, b) => {
-          const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
-          const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
-          return dateB - dateA;
-        });
-
-        setArticles(uniqueArticles);
-
-        if (refreshTrigger > 0) {
-          toast({ title: "Feed updated!" });
-        }
-      } catch (error) {
-        console.error("Failed to fetch articles:", error);
-        setArticles([]);
-        toast({ variant: "destructive", title: "Error", description: "Failed to fetch articles." });
-      } finally {
-        setIsLoading(false);
-        setIsRefreshing(false);
-      }
-    };
-
-    getArticles();
-    
-  }, [preferences, selectedLang, refreshTrigger, toast]);
+    loadAndFetchArticles();
+  }, [loadAndFetchArticles]);
 
   const handleRefresh = () => {
     setRefreshTrigger(t => t + 1);
@@ -101,7 +88,6 @@ export default function MyFeedPage() {
     });
   }, [searchTerm, articles]);
   
-  // This state is now only for when there's an issue loading preferences or they are empty.
   if (!isLoading && (!preferences || preferences.categories.length === 0)) {
     return (
       <AppLayout>
