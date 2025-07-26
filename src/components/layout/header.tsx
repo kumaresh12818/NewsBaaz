@@ -18,10 +18,13 @@ import Link from 'next/link';
 import { useLanguage } from '@/context/language-context';
 import { ThemeToggle } from '../theme-toggle';
 import { useUser } from '@/context/user-context';
+import { usePathname } from 'next/navigation';
 
 export function AppHeader() {
   const { selectedLang, handleLanguageChange } = useLanguage();
   const { user } = useUser();
+  const pathname = usePathname();
+  const isPhotographyPage = pathname === '/photography';
 
   const toggleLanguage = () => {
     const newLang = selectedLang === 'en' ? 'bn' : 'en';
@@ -56,10 +59,12 @@ export function AppHeader() {
       
       <div className="flex w-full items-center justify-end gap-4">
         <ThemeToggle />
-        <Button variant="outline" size="icon" onClick={toggleLanguage}>
-          <Globe className="h-5 w-5" />
-          <span className="sr-only">Toggle Language</span>
-        </Button>
+        {!isPhotographyPage && (
+          <Button variant="outline" size="icon" onClick={toggleLanguage}>
+            <Globe className="h-5 w-5" />
+            <span className="sr-only">Toggle Language</span>
+          </Button>
+        )}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
