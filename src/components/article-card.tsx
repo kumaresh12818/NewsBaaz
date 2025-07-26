@@ -54,8 +54,7 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
     const contentToSummarize = article.content || article.summary;
     if (!contentToSummarize || contentToSummarize.trim() === '' || contentToSummarize === 'No content available.') {
       toast({
-        title: 'Summarization Not Available',
-        description: 'There is not enough content to summarize this article.',
+        title: 'AI summary is not available',
       });
       return;
     }
