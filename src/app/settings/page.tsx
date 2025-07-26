@@ -112,7 +112,7 @@ export default function SettingsPage() {
     <AppLayout>
       <div className="flex-1 space-y-8 p-4 md:p-8">
         <div className="flex items-center justify-between">
-          <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-primary flex items-center gap-3 glass rounded-lg px-4 py-2 shadow-lg shadow-primary/20">
+          <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-primary flex items-center gap-3 glass rounded-lg px-4 py-2 shadow-lg shadow-cyan-500/50">
             <SettingsIcon className="h-10 w-10" />
             Settings
           </h1>
