@@ -1,47 +1,113 @@
 
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { AppLayout } from '@/components/layout/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Settings as SettingsIcon, Edit2 } from 'lucide-react';
+import { Settings as SettingsIcon, Edit2, Loader2, AlertTriangle } from 'lucide-react';
 import { useUser } from '@/context/user-context';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 export default function SettingsPage() {
-  const { user, updateUser } = useUser();
+  const { user, updateUser, loading } = useUser();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const router = useRouter();
+  
+  const [name, setName] = useState(user?.name || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !user) {
+        // Redirect to login or show a message if not logged in
+        // For now, let's just disable the form.
+    } else if (user) {
+        setName(user.name);
+        setEmail(user.email);
+    }
+  }, [user, loading, router]);
+
 
   const handleAvatarClick = () => {
+    if (!user) return;
     fileInputRef.current?.click();
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!user) return;
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        updateUser({ ...user, avatarUrl: reader.result as string });
-        toast({ title: 'Avatar updated successfully!' });
+      reader.onloadend = async () => {
+        try {
+          setIsSaving(true);
+          await updateUser({ avatarUrl: reader.result as string });
+          toast({ title: 'Avatar updated successfully!' });
+        } catch (error: any) {
+          toast({ variant: 'destructive', title: 'Error', description: error.message });
+        } finally {
+          setIsSaving(false);
+        }
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSaveChanges = (e: React.FormEvent) => {
+  const handleSaveChanges = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const name = formData.get('name') as string;
-    const email = formData.get('email') as string;
-    updateUser({ ...user, name, email });
-    toast({ title: 'Profile changes saved!' });
+    if (!user) return;
+    try {
+      setIsSaving(true);
+      await updateUser({ name, email });
+      toast({ title: 'Profile changes saved!' });
+    } catch (error: any) {
+      toast({ variant: 'destructive', title: 'Error', description: error.message });
+    } finally {
+      setIsSaving(false);
+    }
   };
   
+  if (loading) {
+     return (
+      <AppLayout>
+        <div className="flex-1 space-y-8 p-4 md:p-8 flex items-center justify-center">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        </div>
+      </AppLayout>
+     )
+  }
+
+  if (!user) {
+    return (
+      <AppLayout>
+        <div className="flex-1 space-y-8 p-4 md:p-8">
+            <Card className="glass max-w-lg mx-auto">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <AlertTriangle className="text-primary h-6 w-6" />
+                        Access Denied
+                    </CardTitle>
+                    <CardDescription>
+                        You must be logged in to access the settings page.
+                    </CardDescription>
+                </CardHeader>
+                <CardFooter>
+                    <Button asChild>
+                        <a href="/login">Login</a>
+                    </Button>
+                </CardFooter>
+            </Card>
+        </div>
+      </AppLayout>
+    )
+  }
+
   return (
     <AppLayout>
       <div className="flex-1 space-y-8 p-4 md:p-8">
@@ -90,39 +156,20 @@ export default function SettingsPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" name="name" defaultValue={user.name} />
+                <Input id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" defaultValue={user.email} />
+                <Input id="email" name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit">Save changes</Button>
+              <Button type="submit" disabled={isSaving}>
+                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Save changes
+              </Button>
             </CardFooter>
           </form>
-        </Card>
-
-        <Card className="glass">
-          <CardHeader>
-            <CardTitle>Password</CardTitle>
-            <CardDescription>
-              Change your password here.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="current-password">Current Password</Label>
-              <Input id="current-password" type="password" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="new-password">New Password</Label>
-              <Input id="new-password" type="password" />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button>Update Password</Button>
-          </CardFooter>
         </Card>
       </div>
     </AppLayout>

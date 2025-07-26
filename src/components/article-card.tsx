@@ -4,7 +4,7 @@
 import Image from 'next/image';
 import type { Article } from '@/lib/types';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Bookmark, Wand2, Loader2, X } from 'lucide-react';
+import { Bookmark, Wand2, Loader2, X, AlertTriangle } from 'lucide-react';
 import { useBookmark } from '@/context/bookmark-context';
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
@@ -16,11 +16,11 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogClose
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Badge } from './ui/badge';
-import { cn } from '@/lib/utils';
-
+import { useUser } from '@/context/user-context';
+import Link from 'next/link';
 
 interface ArticleCardProps {
   article: Article;
@@ -29,17 +29,24 @@ interface ArticleCardProps {
 
 export function ArticleCard({ article, lang }: ArticleCardProps) {
   const { isBookmarked, addBookmark, removeBookmark } = useBookmark();
+  const { user } = useUser();
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [analysis, setAnalysis] = useState<SummarizeArticleOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-
 
   const bookmarked = isBookmarked(article.id);
 
   const handleBookmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+
     if (bookmarked) {
       removeBookmark(article.id);
     } else {
@@ -68,11 +75,6 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
       setAnalysis(result);
     } catch (error) {
       console.error('AI analysis failed:', error);
-      toast({
-        variant: 'destructive',
-        title: 'Analysis Failed',
-        description: 'The AI analysis could not be completed. Please try again.',
-      });
       setIsSummaryOpen(false); // Close dialog on error
     } finally {
       setIsLoading(false);
@@ -161,6 +163,28 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
            <DialogFooter>
             <Button variant="outline" onClick={() => setIsSummaryOpen(false)}>
               Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      <Dialog open={showAuthModal} onOpenChange={setShowAuthModal}>
+        <DialogContent className="glass">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="text-primary" />
+              Authentication Required
+            </DialogTitle>
+            <DialogDescription>
+              You need to be logged in to bookmark articles.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:justify-center">
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button asChild>
+              <Link href="/login">Login</Link>
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Globe, Menu, Newspaper } from 'lucide-react';
+import { Globe, Menu, Newspaper, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -18,17 +18,28 @@ import Link from 'next/link';
 import { useLanguage } from '@/context/language-context';
 import { ThemeToggle } from '../theme-toggle';
 import { useUser } from '@/context/user-context';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { auth } from '@/lib/firebase';
+import { signOut } from 'firebase/auth';
+import { useToast } from '@/hooks/use-toast';
 
 export function AppHeader() {
   const { selectedLang, handleLanguageChange } = useLanguage();
   const { user } = useUser();
   const pathname = usePathname();
+  const router = useRouter();
+  const { toast } = useToast();
   const isPhotographyPage = pathname === '/photography';
 
   const toggleLanguage = () => {
     const newLang = selectedLang === 'en' ? 'bn' : 'en';
     handleLanguageChange(newLang);
+  };
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    toast({ title: 'Logged out successfully.' });
+    router.push('/login');
   };
 
   return (
@@ -70,22 +81,42 @@ export function AppHeader() {
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon" className="rounded-full">
               <Avatar>
-                <AvatarImage src={user.avatarUrl} alt={user.name} />
-                <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                {user ? (
+                  <>
+                    <AvatarImage src={user.avatarUrl} alt={user.name} />
+                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                  </>
+                ) : (
+                  <AvatarFallback>G</AvatarFallback>
+                )}
               </Avatar>
               <span className="sr-only">Toggle user menu</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/settings">Settings</Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/login">Logout</Link>
-            </DropdownMenuItem>
+            {user ? (
+              <>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/settings">Settings</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </DropdownMenuItem>
+              </>
+            ) : (
+              <>
+                <DropdownMenuItem asChild>
+                  <Link href="/login">Login</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/signup">Sign Up</Link>
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
