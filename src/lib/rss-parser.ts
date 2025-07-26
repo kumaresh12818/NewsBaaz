@@ -75,7 +75,8 @@ export async function fetchArticles(
       `/api/rss?section=${section}&category=${encodeURIComponent(category)}&lang=${lang}`
     );
     if (!response.ok) {
-      throw new Error(`Failed to fetch articles: ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(`Failed to fetch articles: ${response.status} ${response.statusText} - ${errorText}`);
     }
     const items: (Item & {category: string, source: string})[] = await response.json();
     
@@ -83,10 +84,11 @@ export async function fetchArticles(
       const imageUrl = extractImageUrl(item.content || '', item, item.source);
       const summary = item.contentSnippet || 'No summary available.';
       const cleanSummary = summary.replace(/<[^>]*>?/gm, '');
+      const id = item.guid || item.link || `${item.title}-${index}`;
 
       return {
-        id: item.guid || item.link || index.toString(),
-        slug: item.link ? new URL(item.link).pathname.split('/').pop()! : `article-${index}`,
+        id: id,
+        slug: item.link ? new URL(item.link).pathname.split('/').pop()! : `article-${id}`,
         title: cleanTitle(item.title || 'No title'),
         author: item.creator || item.source,
         source: cleanSource(item.source || ''),

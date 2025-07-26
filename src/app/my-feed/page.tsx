@@ -21,7 +21,7 @@ export default function MyFeedPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const { toast } = useToast();
-  const [preferences, setPreferences] = useState<{ lang: string, categories: string[] }>({ lang: selectedLang, categories: [] });
+  const [preferences, setPreferences] = useState<{ lang: string, categories: string[] } | null>(null);
 
   useEffect(() => {
     const storedPrefs = localStorage.getItem('userPreferences');
@@ -31,12 +31,14 @@ export default function MyFeedPage() {
       if (parsedPrefs.lang !== selectedLang) {
         handleLanguageChange(parsedPrefs.lang);
       }
+    } else {
+        setIsLoading(false); // No prefs, stop loading
     }
   }, [handleLanguageChange, selectedLang]);
 
   useEffect(() => {
     const getArticles = async () => {
-      if (preferences.categories.length === 0) {
+      if (!preferences || preferences.categories.length === 0) {
         setIsLoading(false);
         return;
       }
@@ -55,7 +57,7 @@ export default function MyFeedPage() {
         const combinedArticles = results.flat();
         
         // Remove duplicates
-        const uniqueArticles = Array.from(new Map(combinedArticles.map(item => [item.id, item])).values());
+        const uniqueArticles = Array.from(new Map(combinedArticles.map(item => [item.link, item])).values());
         
         uniqueArticles.sort((a, b) => {
           const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
@@ -78,8 +80,8 @@ export default function MyFeedPage() {
       }
     };
 
-    if (preferences.lang && preferences.categories.length > 0) {
-      getArticles();
+    if (preferences) {
+        getArticles();
     }
     
   }, [preferences, refreshTrigger, toast]);
@@ -96,7 +98,7 @@ export default function MyFeedPage() {
     });
   }, [searchTerm, articles]);
   
-  if (!preferences.categories.length && !isLoading) {
+  if (!isLoading && (!preferences || preferences.categories.length === 0)) {
     return (
       <AppLayout>
         <div className="flex-1 space-y-8 p-4 md:p-8">
