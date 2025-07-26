@@ -146,7 +146,7 @@ export default function Home() {
       <div className="flex-1 space-y-8 p-4 md:p-8">
         <div className="container max-w-3xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-            <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-primary flex items-center gap-3 border-2 border-primary/20 rounded-lg px-4 py-2">
+            <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-primary flex items-center gap-3 glass rounded-lg px-4 py-2 shadow-lg shadow-primary/20">
               <Newspaper className="h-10 w-10" />
               {selectedCategory}
             </h1>
