@@ -1,6 +1,7 @@
+
 'use client';
 
-import { Menu, Newspaper } from 'lucide-react';
+import { Globe, Menu, Newspaper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -15,15 +16,13 @@ import {
 import { SidebarNav } from './sidebar-nav';
 import Link from 'next/link';
 import { mockUser } from '@/lib/mock-data';
+import { useLanguage } from '@/context/language-context';
 
 export function AppHeader() {
+  const { handleLanguageChange } = useLanguage();
+
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/60 px-4 backdrop-blur-lg md:px-6">
-      <Link href="/" className="flex items-center gap-2 font-headline text-2xl tracking-wider text-primary">
-        <Newspaper className="h-7 w-7" />
-        <span>NewsBlend</span>
-      </Link>
-
       <div className="md:hidden">
         <Sheet>
           <SheetTrigger asChild>
@@ -33,15 +32,39 @@ export function AppHeader() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="glass p-0">
-            <SheetHeader className='p-4'>
+             <SheetHeader className='p-4'>
                <SheetTitle className='sr-only'>Mobile Navigation Menu</SheetTitle>
             </SheetHeader>
             <SidebarNav isMobile={true} />
           </SheetContent>
         </Sheet>
       </div>
-
+      
+      <div className="hidden md:flex flex-1 items-center">
+        <Link href="/" className="flex items-center gap-2 font-headline text-2xl tracking-wider text-primary">
+          <Newspaper className="h-7 w-7" />
+          <span>NewsBlend</span>
+        </Link>
+      </div>
+      
       <div className="flex w-full items-center justify-end gap-4">
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Globe className="h-5 w-5" />
+                <span className="sr-only">Select Language</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onSelect={() => handleLanguageChange('en')}>
+                English
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => handleLanguageChange('bn')}>
+                Bengali
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon" className="rounded-full">

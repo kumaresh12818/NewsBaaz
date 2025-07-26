@@ -1,3 +1,4 @@
+
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -17,7 +18,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['Lato', 'sans-serif'],
+        body: ['var(--font-family-body)', 'sans-serif'],
         headline: ['Bebas Neue', 'sans-serif'],
         code: ['monospace'],
       },

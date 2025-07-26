@@ -16,15 +16,7 @@ import {
 } from '@/components/ui/select';
 import { fetchArticles } from '@/lib/rss-parser';
 import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/utils';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Globe } from 'lucide-react';
+import { useLanguage } from '@/context/language-context';
 
 const allCategories: { [lang: string]: string[] } = {
   en: [
@@ -50,18 +42,25 @@ const allCategories: { [lang: string]: string[] } = {
     'Cricket',
     'Entertainment',
     'Astrology',
-  ]
+  ],
 };
 
 
 export default function Home() {
+  const { selectedLang } = useLanguage();
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedLang, setSelectedLang] = useState('en');
+  
   const [categories, setCategories] = useState(allCategories[selectedLang]);
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const isFetchingRef = useRef(false);
+
+  useEffect(() => {
+    const newCategories = allCategories[selectedLang];
+    setCategories(newCategories);
+    setSelectedCategory(newCategories[0]);
+  }, [selectedLang]);
 
   useEffect(() => {
     const getArticles = async () => {
@@ -98,13 +97,6 @@ export default function Home() {
     setSelectedCategory(category);
   };
   
-  const handleLanguageChange = (lang: string) => {
-    setSelectedLang(lang);
-    const newCategories = allCategories[lang];
-    setCategories(newCategories);
-    setSelectedCategory(newCategories[0]);
-  };
-
   return (
     <AppLayout>
       <div className="flex-1 space-y-8 p-4 md:p-8">
@@ -122,22 +114,6 @@ export default function Home() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Globe className="h-5 w-5" />
-                  <span className="sr-only">Select Language</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onSelect={() => handleLanguageChange('en')}>
-                  English
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => handleLanguageChange('bn')}>
-                  Bengali
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
             <Select value={selectedCategory} onValueChange={handleCategoryChange}>
               <SelectTrigger className="w-full md:w-[180px]">
                 <SelectValue placeholder="Filter by category" />
