@@ -15,12 +15,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { SidebarNav } from './sidebar-nav';
 import Link from 'next/link';
-import { mockUser } from '@/lib/mock-data';
 import { useLanguage } from '@/context/language-context';
 import { ThemeToggle } from '../theme-toggle';
+import { useUser } from '@/context/user-context';
 
 export function AppHeader() {
   const { selectedLang, handleLanguageChange } = useLanguage();
+  const { user } = useUser();
 
   const toggleLanguage = () => {
     const newLang = selectedLang === 'en' ? 'bn' : 'en';
@@ -64,8 +65,8 @@ export function AppHeader() {
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon" className="rounded-full">
               <Avatar>
-                <AvatarImage src={mockUser.avatarUrl} alt={mockUser.name} />
-                <AvatarFallback>{mockUser.name.charAt(0)}</AvatarFallback>
+                <AvatarImage src={user.avatarUrl} alt={user.name} />
+                <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <span className="sr-only">Toggle user menu</span>
             </Button>

@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { LanguageProvider } from '@/context/language-context';
 import { ThemeProvider } from '@/components/theme-provider';
 import { BookmarkProvider } from '@/context/bookmark-context';
+import { UserProvider } from '@/context/user-context';
 
 export const metadata: Metadata = {
   title: 'NewsBlend',
@@ -32,7 +33,9 @@ export default function RootLayout({
         >
           <LanguageProvider>
             <BookmarkProvider>
-              {children}
+              <UserProvider>
+                {children}
+              </UserProvider>
             </BookmarkProvider>
           </LanguageProvider>
           <Toaster />
