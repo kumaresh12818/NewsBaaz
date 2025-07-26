@@ -51,7 +51,7 @@ const allCategories: { [lang: string]: string[] } = {
 };
 
 export default function Home() {
-  const { selectedLang } = useLanguage();
+  const { selectedLang, handleLanguageChange: setGlobalLang } = useLanguage();
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -65,7 +65,7 @@ export default function Home() {
 
   useEffect(() => {
     // Redirect to my-feed if preferences are set
-    if (localStorage.getItem('userPreferences')) {
+    if (typeof window !== 'undefined' && localStorage.getItem('userPreferences')) {
       router.replace('/my-feed');
     }
   }, [router]);
@@ -79,36 +79,45 @@ export default function Home() {
     if (!newCategories.includes(selectedCategory)) {
       categoryToFetch = newCategories[0];
       setSelectedCategory(categoryToFetch);
-    }
+    } else {
+        // This 'else' is important to trigger a fetch when language changes but category is valid.
+        const getArticles = async () => {
+          if (refreshTrigger === 0) { // Only show full loading skeleton on initial load
+            setIsLoading(true);
+          } else {
+            setIsRefreshing(true);
+          }
     
-    const getArticles = async () => {
-      if (refreshTrigger === 0) { // Only show full loading skeleton on initial load
-        setIsLoading(true);
-      } else {
-        setIsRefreshing(true);
-      }
+          try {
+            const fetchedArticles = await fetchArticles(categoryToFetch, selectedLang, 'news');
+            setArticles(fetchedArticles);
+            if (refreshTrigger > 0) {
+              toast({ title: "Feed updated!" });
+            }
+          } catch (error) {
+            console.error("Failed to fetch articles:", error);
+            setArticles([]);
+            toast({ variant: "destructive", title: "Error", description: "Failed to fetch articles." });
+          } finally {
+            setIsLoading(false);
+            setIsRefreshing(false);
+          }
+        };
 
-      try {
-        const fetchedArticles = await fetchArticles(categoryToFetch, selectedLang, 'news');
-        setArticles(fetchedArticles);
-        if (refreshTrigger > 0) {
-          toast({ title: "Feed updated!" });
+        if (categoryToFetch) {
+            getArticles();
         }
-      } catch (error) {
-        console.error("Failed to fetch articles:", error);
-        setArticles([]);
-        toast({ variant: "destructive", title: "Error", description: "Failed to fetch articles." });
-      } finally {
-        setIsLoading(false);
-        setIsRefreshing(false);
-      }
-    };
-
-    if (categoryToFetch) {
-      getArticles();
     }
     
-  }, [selectedLang, selectedCategory, refreshTrigger]);
+  }, [selectedLang, selectedCategory, refreshTrigger, toast]);
+
+  // This effect handles the case where the category is changed and is now invalid for the new language
+  useEffect(() => {
+      const newCategories = allCategories[selectedLang];
+      if (!newCategories.includes(selectedCategory)) {
+          setSelectedCategory(newCategories[0]);
+      }
+  }, [selectedLang, selectedCategory]);
 
   const handleRefresh = () => {
     setRefreshTrigger(t => t + 1);

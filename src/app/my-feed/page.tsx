@@ -12,9 +12,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useLanguage } from '@/context/language-context';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 export default function MyFeedPage() {
   const { selectedLang, handleLanguageChange } = useLanguage();
+  const router = useRouter();
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -22,35 +24,26 @@ export default function MyFeedPage() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const { toast } = useToast();
   const [preferences, setPreferences] = useState<{ lang: string, categories: string[] } | null>(null);
-  const [isReadyToFetch, setIsReadyToFetch] = useState(false);
 
   useEffect(() => {
     const storedPrefs = localStorage.getItem('userPreferences');
     if (storedPrefs) {
       const parsedPrefs = JSON.parse(storedPrefs);
       setPreferences(parsedPrefs);
-      if (parsedPrefs.lang !== selectedLang) {
-        handleLanguageChange(parsedPrefs.lang);
-      } else {
-        // If languages match, we are ready to fetch
-        setIsReadyToFetch(true);
-      }
+      // We set the language in the context, and the article fetching will be triggered by the language change effect
+      handleLanguageChange(parsedPrefs.lang);
     } else {
-        setIsLoading(false); // No prefs, stop loading
+        // If there are no preferences, we shouldn't be on this page.
+        // Redirect to onboarding to set preferences.
+        router.replace('/onboarding');
     }
-  }, []);
-
-  // This effect ensures we only mark as ready to fetch when the language context has updated.
-  useEffect(() => {
-      if (preferences && preferences.lang === selectedLang) {
-          setIsReadyToFetch(true);
-      }
-  }, [selectedLang, preferences])
+  }, [router]); // Only run on mount to get preferences
 
 
   useEffect(() => {
     const getArticles = async () => {
-      if (!isReadyToFetch || !preferences || preferences.categories.length === 0) {
+      // We need both preferences and for the language context to be updated.
+      if (!preferences || preferences.lang !== selectedLang || preferences.categories.length === 0) {
         if(!preferences) setIsLoading(false);
         return;
       }
@@ -92,11 +85,9 @@ export default function MyFeedPage() {
       }
     };
 
-    if (isReadyToFetch) {
-        getArticles();
-    }
+    getArticles();
     
-  }, [preferences, refreshTrigger, toast, isReadyToFetch]);
+  }, [preferences, selectedLang, refreshTrigger, toast]);
 
   const handleRefresh = () => {
     setRefreshTrigger(t => t + 1);
@@ -110,6 +101,7 @@ export default function MyFeedPage() {
     });
   }, [searchTerm, articles]);
   
+  // This state is now only for when there's an issue loading preferences or they are empty.
   if (!isLoading && (!preferences || preferences.categories.length === 0)) {
     return (
       <AppLayout>
@@ -118,7 +110,7 @@ export default function MyFeedPage() {
                  <Rss className="h-16 w-16 mx-auto text-primary" />
                 <h1 className="mt-4 text-3xl font-headline tracking-wider">Your Feed is Empty</h1>
                 <p className="mt-2 text-muted-foreground">
-                    You haven't selected any categories yet.
+                    You haven't selected any categories yet or there was an issue loading your preferences.
                 </p>
                 <Button asChild className="mt-4">
                     <a href="/onboarding">Personalize Your Feed</a>
