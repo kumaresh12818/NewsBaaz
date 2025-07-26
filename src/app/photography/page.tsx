@@ -21,8 +21,30 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
 const allCategories: { [lang: string]: string[] } = {
-  en: ['Nature'],
-  bn: ['Nature'],
+  en: [
+    'Nature',
+    'BBC In Pictures',
+    'Reuters Pictures',
+    'NASA Image of the Day',
+    'NASA APOD',
+    'Space.com',
+    'Hubble News',
+    'ESA Space Science',
+    'Earth Observatory',
+    'Nature.org',
+  ],
+  bn: [
+    'Nature',
+    'BBC In Pictures',
+    'Reuters Pictures',
+    'NASA Image of the Day',
+    'NASA APOD',
+    'Space.com',
+    'Hubble News',
+    'ESA Space Science',
+    'Earth Observatory',
+    'Nature.org',
+  ],
 };
 
 export default function PhotographyPage() {

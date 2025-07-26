@@ -36,9 +36,27 @@ const rssFeeds: { [key: string]: { [category: string]: string } } = {
   photography: {
     en: {
       'Nature': 'https://www.flickr.com/services/feeds/photos_public.gne?tags=nature&format=rss_200',
+      'BBC In Pictures': 'https://feeds.bbci.co.uk/news/in_pictures/rss.xml',
+      'Reuters Pictures': 'https://www.reutersagency.com/feed/?best-topics=pictures&post_type=best',
+      'NASA Image of the Day': 'https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss',
+      'NASA APOD': 'https://apod.nasa.gov/apod.rss',
+      'Space.com': 'https://www.space.com/feeds/all',
+      'Hubble News': 'https://hubblesite.org/api/v3/rss/news_release_image',
+      'ESA Space Science': 'https://www.esa.int/rssfeed/Our_Activities/Space_Science',
+      'Earth Observatory': 'https://earthobservatory.nasa.gov/feeds/rss',
+      'Nature.org': 'https://blog.nature.org/science/feed/',
     },
     bn: {
       'Nature': 'https://www.flickr.com/services/feeds/photos_public.gne?tags=nature&format=rss_200',
+      'BBC In Pictures': 'https://feeds.bbci.co.uk/news/in_pictures/rss.xml',
+      'Reuters Pictures': 'https://www.reutersagency.com/feed/?best-topics=pictures&post_type=best',
+      'NASA Image of the Day': 'https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss',
+      'NASA APOD': 'https://apod.nasa.gov/apod.rss',
+      'Space.com': 'https://www.space.com/feeds/all',
+      'Hubble News': 'https://hubblesite.org/api/v3/rss/news_release_image',
+      'ESA Space Science': 'https://www.esa.int/rssfeed/Our_Activities/Space_Science',
+      'Earth Observatory': 'https://earthobservatory.nasa.gov/feeds/rss',
+      'Nature.org': 'https://blog.nature.org/science/feed/',
     }
   }
 };
