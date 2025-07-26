@@ -35,6 +35,14 @@ function extractImageUrl(content: string, item: any, source: string): string {
       return match[1];
     }
   }
+  
+  if (source === 'This is Colossal') {
+    const imgRegex = /<img[^>]+src="([^">]+)"/;
+    const match = content.match(imgRegex);
+    if (match) {
+      return match[1];
+    }
+  }
 
 
   return 'https://placehold.co/600x400.png';

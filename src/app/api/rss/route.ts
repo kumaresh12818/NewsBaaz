@@ -46,6 +46,15 @@ const rssFeeds: { [key: string]: { [category: string]: string | string[] } } = {
         'https://www.esa.int/rssfeed/Our_Activities/Space_Science',
         'https://earthobservatory.nasa.gov/feeds/rss',
         'https://blog.nature.org/science/feed/',
+        'https://www.behance.net/galleries/featured?content=projects&format=rss',
+        'https://rss.app/feeds/pB44nwiUuEkixuSz.xml',
+        'https://www.designboom.com/feed/',
+        'https://www.itsnicethat.com/feed',
+        'https://500px.com/editors.rss',
+        'https://www.flickr.com/explore/interesting/7days/rss',
+        'https://petapixel.com/feed/',
+        'https://www.thisiscolossal.com/feed/',
+        'https://abduzeedo.com/rss.xml',
       ]
     },
     bn: {
@@ -60,6 +69,15 @@ const rssFeeds: { [key: string]: { [category: string]: string | string[] } } = {
         'https://www.esa.int/rssfeed/Our_Activities/Space_Science',
         'https://earthobservatory.nasa.gov/feeds/rss',
         'https://blog.nature.org/science/feed/',
+        'https://www.behance.net/galleries/featured?content=projects&format=rss',
+        'https://rss.app/feeds/pB44nwiUuEkixuSz.xml',
+        'https://www.designboom.com/feed/',
+        'https://www.itsnicethat.com/feed',
+        'https://500px.com/editors.rss',
+        'https://www.flickr.com/explore/interesting/7days/rss',
+        'https://petapixel.com/feed/',
+        'https://www.thisiscolossal.com/feed/',
+        'https://abduzeedo.com/rss.xml',
       ]
     }
   }
