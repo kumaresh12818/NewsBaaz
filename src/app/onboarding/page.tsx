@@ -14,10 +14,13 @@ import {
 } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Newspaper } from 'lucide-react';
+import { Newspaper, Globe } from 'lucide-react';
 import Link from 'next/link';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { all } from 'q';
 
-const allCategories: string[] = [
+const allCategories: { [lang: string]: string[] } = {
+  en: [
     'Top Stories',
     'Recent Stories',
     'India',
@@ -30,11 +33,30 @@ const allCategories: string[] = [
     'Education',
     'Entertainment',
     'Astrology',
-];
+  ],
+  bn: [
+    'Nation-And-World',
+    'Bengal',
+    'Kolkata',
+    'Districts',
+    'Sports',
+    'Cricket',
+    'Entertainment',
+    'Astrology',
+  ]
+};
 
 export default function OnboardingPage() {
+  const [selectedLang, setSelectedLang] = useState('en');
+  const [categories, setCategories] = useState(allCategories[selectedLang]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const router = useRouter();
+
+  const handleLanguageChange = (lang: string) => {
+    setSelectedLang(lang);
+    setCategories(allCategories[lang]);
+    setSelectedCategories([]); // Reset selected categories when language changes
+  };
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategories((prev) =>
@@ -46,6 +68,7 @@ export default function OnboardingPage() {
 
   const handleFinish = () => {
     // In a real app, you would save these preferences to a database.
+    console.log('Selected Language:', selectedLang);
     console.log('Selected Categories:', selectedCategories);
     router.push('/');
   };
@@ -63,14 +86,35 @@ export default function OnboardingPage() {
                 <CardHeader>
                     <CardTitle className="text-3xl font-headline tracking-wide">Welcome to NewsBlend!</CardTitle>
                     <CardDescription>
-                        Let's personalize your news feed. Select your favorite categories.
+                        Let's personalize your news feed. Select your language and favorite categories.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-8">
                     <div className="space-y-4">
+                        <Label className="text-lg font-semibold flex items-center gap-2">
+                            <Globe className="h-5 w-5" />
+                            Select your language
+                        </Label>
+                        <RadioGroup
+                            defaultValue="en"
+                            onValueChange={handleLanguageChange}
+                            className="flex space-x-4"
+                        >
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="en" id="en" />
+                                <Label htmlFor="en">English</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="bn" id="bn" />
+                                <Label htmlFor="bn">Bengali</Label>
+                            </div>
+                        </RadioGroup>
+                    </div>
+
+                    <div className="space-y-4">
                         <Label className="text-lg font-semibold">Select your favorite categories</Label>
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            {allCategories.map((category) => (
+                            {categories.map((category) => (
                                 <div key={category} className="flex items-center space-x-2">
                                     <Checkbox
                                         id={category}

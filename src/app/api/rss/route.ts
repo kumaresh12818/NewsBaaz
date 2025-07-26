@@ -19,6 +19,16 @@ const rssFeeds: { [lang: string]: { [category: string]: string } } = {
     'Entertainment': 'http://timesofindia.indiatimes.com/rssfeeds/1081479906.cms',
     'Astrology': 'https://timesofindia.indiatimes.com/rssfeeds/65857041.cms',
   },
+  bn: {
+    'Nation-And-World': 'https://bangla.hindustantimes.com/rss/nation-and-world',
+    'Bengal': 'https://bangla.hindustantimes.com/rss/bengal',
+    'Kolkata': 'https://bangla.hindustantimes.com/rss/bengal/kolkata',
+    'Districts': 'https://bangla.hindustantimes.com/rss/bengal/districts',
+    'Sports': 'https://bangla.hindustantimes.com/rss/sports',
+    'Cricket': 'https://bangla.hindustantimes.com/rss/cricket',
+    'Entertainment': 'https://bangla.hindustantimes.com/rss/entertainment',
+    'Astrology': 'https://bangla.hindustantimes.com/rss/astrology',
+  }
 };
 
 export async function GET(request: NextRequest) {
@@ -43,6 +53,9 @@ export async function GET(request: NextRequest) {
     const feed = await parser.parseURL(feedUrl);
     
     let source = 'Times of India';
+    if (lang === 'bn') {
+        source = 'Hindustan Times';
+    }
     
     const itemsWithCategory = feed.items.map(item => ({
       ...item,
@@ -56,3 +69,4 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: `Failed to fetch RSS feed for ${finalCategory}` }, { status: 500 });
   }
 }
+

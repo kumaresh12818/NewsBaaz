@@ -17,8 +17,17 @@ import {
 import { fetchArticles } from '@/lib/rss-parser';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Globe } from 'lucide-react';
 
-const allCategories: string[] = [
+const allCategories: { [lang: string]: string[] } = {
+  en: [
     'Top Stories',
     'Recent Stories',
     'India',
@@ -31,25 +40,39 @@ const allCategories: string[] = [
     'Education',
     'Entertainment',
     'Astrology',
-  ];
+  ],
+  bn: [
+    'Nation-And-World',
+    'Bengal',
+    'Kolkata',
+    'Districts',
+    'Sports',
+    'Cricket',
+    'Entertainment',
+    'Astrology',
+  ]
+};
+
 
 export default function Home() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState(allCategories[0]);
+  const [selectedLang, setSelectedLang] = useState('en');
+  const [categories, setCategories] = useState(allCategories[selectedLang]);
+  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const isFetchingRef = useRef(false);
 
   useEffect(() => {
     const getArticles = async () => {
-      if (!selectedCategory || isFetchingRef.current) {
+      if (!selectedCategory || !selectedLang || isFetchingRef.current) {
         return;
       }
 
       isFetchingRef.current = true;
       setIsLoading(true);
       try {
-        const fetchedArticles = await fetchArticles(selectedCategory, 'en');
+        const fetchedArticles = await fetchArticles(selectedCategory, selectedLang);
         setArticles(fetchedArticles);
       } catch (error) {
         console.error("Failed to fetch articles:", error);
@@ -60,7 +83,7 @@ export default function Home() {
       }
     };
     getArticles();
-  }, [selectedCategory]);
+  }, [selectedCategory, selectedLang]);
 
 
   const filteredArticles = useMemo(() => {
@@ -73,6 +96,13 @@ export default function Home() {
   
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
+  };
+  
+  const handleLanguageChange = (lang: string) => {
+    setSelectedLang(lang);
+    const newCategories = allCategories[lang];
+    setCategories(newCategories);
+    setSelectedCategory(newCategories[0]);
   };
 
   return (
@@ -92,12 +122,28 @@ export default function Home() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+             <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <Globe className="h-5 w-5" />
+                  <span className="sr-only">Select Language</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onSelect={() => handleLanguageChange('en')}>
+                  English
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => handleLanguageChange('bn')}>
+                  Bengali
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Select value={selectedCategory} onValueChange={handleCategoryChange}>
               <SelectTrigger className="w-full md:w-[180px]">
                 <SelectValue placeholder="Filter by category" />
               </SelectTrigger>
               <SelectContent>
-                {allCategories.map((category) => (
+                {categories.map((category) => (
                   <SelectItem key={category} value={category}>
                     {category}
                   </SelectItem>

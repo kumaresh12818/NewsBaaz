@@ -2,21 +2,21 @@ import type { Article } from './types';
 import type { Item } from 'rss-parser';
 
 function extractImageUrl(content: string, item: any, source: string): string {
-  if (item.content) {
-    const imgRegex = /<img[^>]+src="([^">]+)"/;
-    const match = item.content.match(imgRegex);
-    if (match) return match[1];
-  }
-  
-  if (item.enclosure?.url) {
-    return item.enclosure.url;
-  }
-  if (item['media:content']?.['$']?.url) {
-    return item['media:content']['$'].url;
-  }
-  if (item['media:thumbnail']?.['$']?.url) {
-    return item['media:thumbnail']['$'].url;
-  }
+    if (item.content) {
+      const imgRegex = /<img[^>]+src="([^">]+)"/;
+      const match = item.content.match(imgRegex);
+      if (match) return match[1];
+    }
+    
+    if (item.enclosure?.url) {
+      return item.enclosure.url;
+    }
+    if (item['media:content']?.['$']?.url) {
+      return item['media:content']['$'].url;
+    }
+    if (item['media:thumbnail']?.['$']?.url) {
+      return item['media:thumbnail']['$'].url;
+    }
   
   // ABP live specific
   if (content) {
@@ -26,6 +26,16 @@ function extractImageUrl(content: string, item: any, source: string): string {
         return match[1];
     }
   }
+
+  // Hindustan Times Bangla
+  if (source === 'Hindustan Times' && content) {
+    const imgRegex = /<img[^>]+src="([^">]+)"/;
+    const match = content.match(imgRegex);
+    if (match) {
+      return match[1];
+    }
+  }
+
 
   return 'https://placehold.co/600x400.png';
 }
@@ -62,3 +72,4 @@ export async function fetchArticles(category: string, lang: string = 'en'): Prom
     return [];
   }
 }
+
