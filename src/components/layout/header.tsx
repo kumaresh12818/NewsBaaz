@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Globe, Menu, Newspaper, LogOut } from 'lucide-react';
+import { Globe, Menu, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -22,6 +22,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
+import Image from 'next/image';
 
 export function AppHeader() {
   const { selectedLang, handleLanguageChange } = useLanguage();
@@ -63,7 +64,7 @@ export function AppHeader() {
       
       <div className="hidden md:flex flex-1 items-center">
         <Link href="/" className="flex items-center gap-2 font-headline text-2xl tracking-wider text-primary">
-          <Newspaper className="h-7 w-7" />
+          <Image src="https://i.postimg.cc/zBdV4JGC/Chat-GPT-Image-Jul-26-2025-11-53-49-PM.png" alt="NewsBaaz Logo" width={28} height={28} />
           <span>NewsBaaz</span>
         </Link>
       </div>

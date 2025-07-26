@@ -226,6 +226,12 @@ const nextConfig: NextConfig = {
         hostname: 'media.blubrry.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.postimg.cc',
+        port: '',
+        pathname: '/**',
       }
     ],
   },

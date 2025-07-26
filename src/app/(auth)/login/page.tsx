@@ -4,7 +4,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Newspaper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -20,6 +19,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -54,7 +54,7 @@ export default function LoginPage() {
     <div className="w-full max-w-md">
        <div className="flex justify-center mb-6">
         <Link href="/" className="flex items-center gap-2 font-headline text-3xl tracking-wider text-primary">
-          <Newspaper className="h-8 w-8" />
+          <Image src="https://i.postimg.cc/zBdV4JGC/Chat-GPT-Image-Jul-26-2025-11-53-49-PM.png" alt="NewsBaaz Logo" width={32} height={32} />
           <span>NewsBaaz</span>
         </Link>
       </div>

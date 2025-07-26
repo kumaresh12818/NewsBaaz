@@ -5,13 +5,14 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { AppLayout } from '@/components/layout/app-layout';
 import { ArticleCard } from '@/components/article-card';
 import type { Article } from '@/lib/types';
-import { RefreshCw, Newspaper } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { fetchArticles } from '@/lib/rss-parser';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useLanguage } from '@/context/language-context';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Home() {
   const { selectedLang } = useLanguage();
@@ -60,12 +61,11 @@ export default function Home() {
         <div className="container max-w-3xl mx-auto">
           <div className="flex items-center justify-between">
             <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-primary flex items-center gap-3 glass rounded-lg px-4 py-2 shadow-lg shadow-cyan-500/50">
-              <Newspaper className="h-10 w-10" />
               News Feed
             </h1>
-            <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing}>
+            <Button variant="outline" onClick={handleRefresh} disabled={isRefreshing} className="px-4 py-2 glass shadow-lg shadow-cyan-500/50">
               <RefreshCw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
-              <span className="sr-only">Refresh News</span>
+              <span className="ml-2 hidden sm:inline">Refresh</span>
             </Button>
           </div>
           {isLoading ? (
