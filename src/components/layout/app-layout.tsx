@@ -23,7 +23,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full overflow-x-hidden">
         <Sidebar className="hidden md:flex md:flex-col md:border-r glass">
           <SidebarNav />
         </Sidebar>
