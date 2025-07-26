@@ -220,6 +220,12 @@ const nextConfig: NextConfig = {
         hostname: 'i.vimeocdn.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'media.blubrry.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },

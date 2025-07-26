@@ -3,7 +3,7 @@ import type { Article } from './types';
 import type { Item } from 'rss-parser';
 
 function extractImageUrl(content: string, item: any, source: string): string {
-  const checkUrl = (url: string) => (url && !url.endsWith('.swf') ? url : null);
+  const checkUrl = (url: string) => (url && !url.endsWith('.swf') && !url.endsWith('.mp3') ? url : null);
 
   let imageUrl = checkUrl(item.enclosure?.url);
   if (imageUrl) return imageUrl;
