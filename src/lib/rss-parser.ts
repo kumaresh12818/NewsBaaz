@@ -3,19 +3,24 @@ import type { Article } from './types';
 import type { Item } from 'rss-parser';
 
 function extractImageUrl(content: string, item: any, source: string): string {
-  if (item.enclosure?.url) {
-    return item.enclosure.url;
-  }
-  if (item['media:content']?.['$']?.url) {
-    return item['media:content']['$'].url;
-  }
-  if (item['media:thumbnail']?.['$']?.url) {
-    return item['media:thumbnail']['$'].url;
-  }
+  const checkUrl = (url: string) => (url && !url.endsWith('.swf') ? url : null);
+
+  let imageUrl = checkUrl(item.enclosure?.url);
+  if (imageUrl) return imageUrl;
+
+  imageUrl = checkUrl(item['media:content']?.['$']?.url);
+  if (imageUrl) return imageUrl;
+
+  imageUrl = checkUrl(item['media:thumbnail']?.['$']?.url);
+  if (imageUrl) return imageUrl;
+  
   if (item.content) {
     const imgRegex = /<img[^>]+src="([^">]+)"/;
     const match = item.content.match(imgRegex);
-    if (match) return match[1];
+    if (match) {
+        imageUrl = checkUrl(match[1]);
+        if (imageUrl) return imageUrl;
+    }
   }
 
   // ABP live specific
@@ -23,7 +28,8 @@ function extractImageUrl(content: string, item: any, source: string): string {
     const imgRegex = /<img[^>]+src="([^">]+)"/;
     const match = content.match(imgRegex);
     if (match) {
-        return match[1];
+        imageUrl = checkUrl(match[1]);
+        if (imageUrl) return imageUrl;
     }
   }
 
@@ -32,7 +38,8 @@ function extractImageUrl(content: string, item: any, source: string): string {
     const imgRegex = /<img[^>]+src="([^">]+)"/;
     const match = content.match(imgRegex);
     if (match) {
-      return match[1];
+        imageUrl = checkUrl(match[1]);
+        if (imageUrl) return imageUrl;
     }
   }
   
@@ -40,7 +47,8 @@ function extractImageUrl(content: string, item: any, source: string): string {
     const imgRegex = /<img[^>]+src="([^">]+)"/;
     const match = content.match(imgRegex);
     if (match) {
-      return match[1];
+        imageUrl = checkUrl(match[1]);
+        if (imageUrl) return imageUrl;
     }
   }
 
