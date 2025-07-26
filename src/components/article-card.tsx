@@ -21,10 +21,8 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
     e.stopPropagation();
     if (bookmarked) {
       removeBookmark(article.id);
-      toast({ title: "Bookmark removed" });
     } else {
       addBookmark(article);
-      toast({ title: "Bookmark added" });
     }
   };
 
