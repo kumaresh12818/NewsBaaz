@@ -50,15 +50,22 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
   const handleSummarizeClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    const contentToSummarize = article.content || article.summary;
+    if (!contentToSummarize || contentToSummarize.trim() === '' || contentToSummarize === 'No content available.') {
+      toast({
+        variant: 'destructive',
+        title: 'Summarization Failed',
+        description: 'This article does not have enough content to summarize.',
+      });
+      return;
+    }
+
     setIsSummaryOpen(true);
     if (analysis) return;
 
     setIsLoading(true);
     try {
-      const contentToSummarize = article.content || article.summary;
-      if (!contentToSummarize || contentToSummarize === 'No content available.') {
-        throw new Error('No content available to summarize.');
-      }
       const result = await summarizeArticle({ articleContent: contentToSummarize });
       setAnalysis(result);
     } catch (error) {
