@@ -69,7 +69,7 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
                 className="rounded-full ml-auto"
                 onClick={handleBookmarkClick}
             >
-                <Bookmark className={`h-5 w-5 ${bookmarked ? 'text-primary fill-primary' : ''}`} />
+                <Bookmark className={`h-5 w-5 ${bookmarked ? 'text-red-500 fill-red-500' : ''}`} />
             </Button>
         </div>
       </CardContent>
