@@ -42,7 +42,7 @@ const allCategories: { [lang: string]: string[] } = {
     'States',
     'World News',
     'Sports',
-    'ENT',
+    'ENTERTAINMENT',
     'Astro',
     'Business',
   ]

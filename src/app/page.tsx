@@ -23,7 +23,7 @@ const allCategories: { [lang: string]: string[] } = {
     'Top Stories',
     'Recent Stories',
     'India',
-    'Kolkata',
+    'KOLKATA',
     'World',
     'Business',
     'Sports',
@@ -41,7 +41,7 @@ const allCategories: { [lang: string]: string[] } = {
     'States',
     'World News',
     'Sports',
-    'ENT',
+    'ENTERTAINMENT',
     'Astro',
     'Business',
   ]
@@ -58,19 +58,16 @@ export default function Home() {
   
   useEffect(() => {
     const newCategories = allCategories[selectedLang];
-    const currentSelectedCategoryIsValid = newCategories.includes(selectedCategory);
+    setCategories(newCategories);
 
     let categoryToFetch = selectedCategory;
 
     // If the current category is not in the new list, update it to the first one.
-    if (!currentSelectedCategoryIsValid) {
+    if (!newCategories.includes(selectedCategory)) {
       categoryToFetch = newCategories[0];
       setSelectedCategory(categoryToFetch);
     }
     
-    // Always update the categories list.
-    setCategories(newCategories);
-
     const getArticles = async () => {
       setIsLoading(true);
       try {

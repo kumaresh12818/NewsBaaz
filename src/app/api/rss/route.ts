@@ -27,7 +27,7 @@ const rssFeeds: { [lang: string]: { [category: string]: string } } = {
     'States': 'https://bengali.abplive.com/states/feed',
     'World News': 'https://bengali.abplive.com/news/world/feed',
     'Sports': 'https://bengali.abplive.com/sports/feed',
-    'ENT': 'https://bengali.abplive.com/entertainment/feed',
+    'ENTERTAINMENT': 'https://bengali.abplive.com/entertainment/feed',
     'Astro': 'https://bengali.abplive.com/astro/feed',
     'Business': 'https://bengali.abplive.com/business/feed',
   }
