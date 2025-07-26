@@ -1,13 +1,15 @@
+
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Newspaper, Home, Bookmark, Settings, LogIn, Camera } from 'lucide-react';
+import { Newspaper, Home, Bookmark, Settings, LogIn, Camera, Rss } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
 const navItems = [
+  { href: '/my-feed', label: 'My Feed', icon: Rss },
   { href: '/', label: 'News', icon: Home },
   { href: '/photography', label: 'Photography', icon: Camera },
   { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark },

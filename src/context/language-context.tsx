@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 
 interface LanguageContextType {
   selectedLang: string;
@@ -14,16 +14,39 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [selectedLang, setSelectedLang] = useState('en');
 
   useEffect(() => {
+    // On initial load, try to get the language from localStorage
+    const storedPrefs = localStorage.getItem('userPreferences');
+    if (storedPrefs) {
+      const parsedPrefs = JSON.parse(storedPrefs);
+      if (parsedPrefs.lang) {
+        setSelectedLang(parsedPrefs.lang);
+      }
+    }
+  }, []);
+
+  const setHtmlLang = useCallback((lang: string) => {
     const root = window.document.documentElement;
-    if (selectedLang === 'bn') {
+    root.lang = lang;
+    if (lang === 'bn') {
       root.style.setProperty('--font-family-body', "'Noto Sans Bengali', sans-serif");
     } else {
       root.style.setProperty('--font-family-body', "'Lato', sans-serif");
     }
-  }, [selectedLang]);
+  }, []);
+  
+  useEffect(() => {
+    setHtmlLang(selectedLang);
+  }, [selectedLang, setHtmlLang]);
 
   const handleLanguageChange = (lang: string) => {
     setSelectedLang(lang);
+    // Also update localStorage if preferences exist
+    const storedPrefs = localStorage.getItem('userPreferences');
+    if (storedPrefs) {
+        const parsedPrefs = JSON.parse(storedPrefs);
+        parsedPrefs.lang = lang;
+        localStorage.setItem('userPreferences', JSON.stringify(parsedPrefs));
+    }
   };
 
   return (

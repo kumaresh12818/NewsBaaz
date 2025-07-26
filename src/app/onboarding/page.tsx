@@ -17,7 +17,7 @@ import { Label } from '@/components/ui/label';
 import { Newspaper, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { all } from 'q';
+import { useLanguage } from '@/context/language-context';
 
 const allCategories: { [lang: string]: string[] } = {
   en: [
@@ -53,6 +53,7 @@ export default function OnboardingPage() {
   const [categories, setCategories] = useState(allCategories[selectedLang]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const router = useRouter();
+  const { handleLanguageChange: setGlobalLanguage } = useLanguage();
 
   const handleLanguageChange = (lang: string) => {
     setSelectedLang(lang);
@@ -69,10 +70,13 @@ export default function OnboardingPage() {
   };
 
   const handleFinish = () => {
-    // In a real app, you would save these preferences to a database.
-    console.log('Selected Language:', selectedLang);
-    console.log('Selected Categories:', selectedCategories);
-    router.push('/');
+    const preferences = {
+        lang: selectedLang,
+        categories: selectedCategories
+    };
+    localStorage.setItem('userPreferences', JSON.stringify(preferences));
+    setGlobalLanguage(selectedLang);
+    router.push('/my-feed');
   };
   
   return (
@@ -135,7 +139,7 @@ export default function OnboardingPage() {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Button onClick={handleFinish} className="w-full md:w-auto" size="lg">
+                    <Button onClick={handleFinish} className="w-full md:w-auto" size="lg" disabled={selectedCategories.length === 0}>
                         Finish Setup & Read News
                     </Button>
                 </CardFooter>
