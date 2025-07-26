@@ -53,25 +53,22 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   
-  const categories = allCategories[selectedLang];
+  const [categories, setCategories] = useState(allCategories[selectedLang]);
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
-  const isFetchingRef = useRef(false);
 
   useEffect(() => {
     const newCategories = allCategories[selectedLang];
-    if (!newCategories.includes(selectedCategory)) {
-        setSelectedCategory(newCategories[0]);
-    }
-  }, [selectedLang, selectedCategory]);
+    setCategories(newCategories);
+    setSelectedCategory(newCategories[0]);
+  }, [selectedLang]);
 
   useEffect(() => {
     const getArticles = async () => {
-      // Don't fetch if we're already fetching or if the category is not valid for the language
-      if (isFetchingRef.current || !allCategories[selectedLang].includes(selectedCategory)) {
+      // Don't fetch if the category is not valid for the language
+      if (!allCategories[selectedLang].includes(selectedCategory)) {
         return;
       }
 
-      isFetchingRef.current = true;
       setIsLoading(true);
       try {
         const fetchedArticles = await fetchArticles(selectedCategory, selectedLang);
@@ -81,10 +78,12 @@ export default function Home() {
         setArticles([]);
       } finally {
         setIsLoading(false);
-        isFetchingRef.current = false;
       }
     };
-    getArticles();
+
+    if (selectedCategory) {
+      getArticles();
+    }
   }, [selectedCategory, selectedLang]);
 
 
@@ -145,7 +144,7 @@ export default function Home() {
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredArticles.map((article: Article) => (
-              <ArticleCard key={article.id} article={article} />
+              <ArticleCard key={article.id} article={article} lang={selectedLang} />
             ))}
           </div>
         )}
