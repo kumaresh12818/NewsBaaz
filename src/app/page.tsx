@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { AppLayout } from '@/components/layout/app-layout';
 import { ArticleCard } from '@/components/article-card';
 import type { Article } from '@/lib/types';
@@ -23,7 +23,7 @@ const allCategories: { [lang: string]: string[] } = {
     'Top Stories',
     'Recent Stories',
     'India',
-    'KOLKATA',
+    'Kolkata',
     'World',
     'Business',
     'Sports',
@@ -58,17 +58,23 @@ export default function Home() {
   
   useEffect(() => {
     const newCategories = allCategories[selectedLang];
-    setCategories(newCategories);
-    if (!newCategories.includes(selectedCategory)) {
-      setSelectedCategory(newCategories[0]);
-    }
-  }, [selectedLang]);
+    const currentSelectedCategoryIsValid = newCategories.includes(selectedCategory);
 
-  useEffect(() => {
+    let categoryToFetch = selectedCategory;
+
+    // If the current category is not in the new list, update it to the first one.
+    if (!currentSelectedCategoryIsValid) {
+      categoryToFetch = newCategories[0];
+      setSelectedCategory(categoryToFetch);
+    }
+    
+    // Always update the categories list.
+    setCategories(newCategories);
+
     const getArticles = async () => {
       setIsLoading(true);
       try {
-        const fetchedArticles = await fetchArticles(selectedCategory, selectedLang);
+        const fetchedArticles = await fetchArticles(categoryToFetch, selectedLang);
         setArticles(fetchedArticles);
       } catch (error) {
         console.error("Failed to fetch articles:", error);
@@ -78,10 +84,10 @@ export default function Home() {
       }
     };
 
-    if (selectedCategory) {
+    if (categoryToFetch) {
       getArticles();
     }
-  }, [selectedCategory, selectedLang]);
+  }, [selectedLang, selectedCategory]);
 
   const filteredArticles = useMemo(() => {
     return articles.filter((article) => {
