@@ -34,15 +34,16 @@ const allCategories: { [lang: string]: string[] } = {
     'Astrology',
   ],
   bn: [
-    'Nation-And-World',
-    'Bengal',
+    'India News',
+    'District News',
     'Kolkata',
-    'Districts',
+    'States',
+    'World News',
     'Sports',
-    'Cricket',
-    'Entertainment',
-    'Astrology',
-  ],
+    'ENT',
+    'Astro',
+    'Business',
+  ]
 };
 
 
@@ -57,7 +58,6 @@ export default function Home() {
   const isFetchingRef = useRef(false);
 
   useEffect(() => {
-    // When language changes, update the selected category to a valid one for the new language.
     const newCategories = allCategories[selectedLang];
     if (!newCategories.includes(selectedCategory)) {
         setSelectedCategory(newCategories[0]);
@@ -66,15 +66,8 @@ export default function Home() {
 
   useEffect(() => {
     const getArticles = async () => {
-      // Don't fetch if we're already fetching
-      if (isFetchingRef.current) {
-        return;
-      }
-      
-      const currentCategories = allCategories[selectedLang];
-      // Ensure the selected category is valid for the current language before fetching
-      if (!currentCategories.includes(selectedCategory)) {
-        // This can happen during transition, just wait for the category to be updated.
+      // Don't fetch if we're already fetching or if the category is not valid for the language
+      if (isFetchingRef.current || !allCategories[selectedLang].includes(selectedCategory)) {
         return;
       }
 

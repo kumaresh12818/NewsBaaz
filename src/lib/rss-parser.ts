@@ -1,3 +1,4 @@
+
 import type { Article } from './types';
 import type { Item } from 'rss-parser';
 
@@ -19,7 +20,7 @@ function extractImageUrl(content: string, item: any, source: string): string {
     }
   
   // ABP live specific
-  if (content) {
+  if (source === 'ABP Live' && content) {
     const imgRegex = /<img[^>]+src="([^">]+)"/;
     const match = content.match(imgRegex);
     if (match) {
@@ -72,4 +73,3 @@ export async function fetchArticles(category: string, lang: string = 'en'): Prom
     return [];
   }
 }
-

@@ -35,14 +35,15 @@ const allCategories: { [lang: string]: string[] } = {
     'Astrology',
   ],
   bn: [
-    'Nation-And-World',
-    'Bengal',
+    'India News',
+    'District News',
     'Kolkata',
-    'Districts',
+    'States',
+    'World News',
     'Sports',
-    'Cricket',
-    'Entertainment',
-    'Astrology',
+    'ENT',
+    'Astro',
+    'Business',
   ]
 };
 
