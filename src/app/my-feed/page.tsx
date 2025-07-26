@@ -22,6 +22,7 @@ export default function MyFeedPage() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const { toast } = useToast();
   const [preferences, setPreferences] = useState<{ lang: string, categories: string[] } | null>(null);
+  const [isReadyToFetch, setIsReadyToFetch] = useState(false);
 
   useEffect(() => {
     const storedPrefs = localStorage.getItem('userPreferences');
@@ -30,16 +31,27 @@ export default function MyFeedPage() {
       setPreferences(parsedPrefs);
       if (parsedPrefs.lang !== selectedLang) {
         handleLanguageChange(parsedPrefs.lang);
+      } else {
+        // If languages match, we are ready to fetch
+        setIsReadyToFetch(true);
       }
     } else {
         setIsLoading(false); // No prefs, stop loading
     }
-  }, [handleLanguageChange, selectedLang]);
+  }, []);
+
+  // This effect ensures we only mark as ready to fetch when the language context has updated.
+  useEffect(() => {
+      if (preferences && preferences.lang === selectedLang) {
+          setIsReadyToFetch(true);
+      }
+  }, [selectedLang, preferences])
+
 
   useEffect(() => {
     const getArticles = async () => {
-      if (!preferences || preferences.categories.length === 0) {
-        setIsLoading(false);
+      if (!isReadyToFetch || !preferences || preferences.categories.length === 0) {
+        if(!preferences) setIsLoading(false);
         return;
       }
       
@@ -56,7 +68,7 @@ export default function MyFeedPage() {
         const results = await Promise.all(promises);
         const combinedArticles = results.flat();
         
-        // Remove duplicates
+        // Remove duplicates based on the link
         const uniqueArticles = Array.from(new Map(combinedArticles.map(item => [item.link, item])).values());
         
         uniqueArticles.sort((a, b) => {
@@ -80,11 +92,11 @@ export default function MyFeedPage() {
       }
     };
 
-    if (preferences) {
+    if (isReadyToFetch) {
         getArticles();
     }
     
-  }, [preferences, refreshTrigger, toast]);
+  }, [preferences, refreshTrigger, toast, isReadyToFetch]);
 
   const handleRefresh = () => {
     setRefreshTrigger(t => t + 1);
