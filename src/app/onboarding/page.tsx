@@ -12,20 +12,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Newspaper } from 'lucide-react';
 import Link from 'next/link';
 
-const allCategories: { [lang: string]: string[] } = {
-  en: [
+const allCategories: string[] = [
     'Top Stories',
     'Recent Stories',
     'India',
@@ -38,45 +30,11 @@ const allCategories: { [lang: string]: string[] } = {
     'Education',
     'Entertainment',
     'Astrology',
-  ],
-  hi: [
-    'India News',
-    'World News',
-    'States',
-    'Sports',
-    'Bollywood',
-    'Television',
-    'Tamil Cinema',
-    'Bhojpuri Cinema',
-    'Astro',
-    'Religion',
-    'Business',
-    'Gadgets',
-    'Life Style',
-    'Health',
-    'Technology',
-    'Education',
-    'Jobs',
-    'Coronavirus',
-    'Agricultures',
-    'GK',
-  ]
-};
-
-const languages = [
-    { value: 'en', label: 'English' },
-    { value: 'hi', label: 'Hindi' },
 ];
 
 export default function OnboardingPage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedLanguage, setSelectedLanguage] = useState('en');
   const router = useRouter();
-
-  const handleLanguageChange = (language: string) => {
-    setSelectedLanguage(language);
-    setSelectedCategories([]); // Reset categories when language changes
-  };
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategories((prev) =>
@@ -89,12 +47,9 @@ export default function OnboardingPage() {
   const handleFinish = () => {
     // In a real app, you would save these preferences to a database.
     console.log('Selected Categories:', selectedCategories);
-    console.log('Selected Language:', selectedLanguage);
     router.push('/');
   };
   
-  const currentCategories = allCategories[selectedLanguage] || [];
-
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
         <div className="w-full max-w-2xl">
@@ -108,30 +63,14 @@ export default function OnboardingPage() {
                 <CardHeader>
                     <CardTitle className="text-3xl font-headline tracking-wide">Welcome to NewsBlend!</CardTitle>
                     <CardDescription>
-                        Let's personalize your news feed. Select your preferred language and categories.
+                        Let's personalize your news feed. Select your favorite categories.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-8">
                     <div className="space-y-4">
-                        <Label className="text-lg font-semibold">Choose your language</Label>
-                        <Select value={selectedLanguage} onValueChange={handleLanguageChange}>
-                            <SelectTrigger className="w-full md:w-[200px]">
-                                <SelectValue placeholder="Language" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {languages.map((lang) => (
-                                <SelectItem key={lang.value} value={lang.value}>
-                                    {lang.label}
-                                </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    <div className="space-y-4">
                         <Label className="text-lg font-semibold">Select your favorite categories</Label>
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            {currentCategories.map((category) => (
+                            {allCategories.map((category) => (
                                 <div key={category} className="flex items-center space-x-2">
                                     <Checkbox
                                         id={category}

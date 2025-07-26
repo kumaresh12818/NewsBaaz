@@ -18,8 +18,7 @@ import { fetchArticles } from '@/lib/rss-parser';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
-const allCategories: { [lang: string]: string[] } = {
-  en: [
+const allCategories: string[] = [
     'Top Stories',
     'Recent Stories',
     'India',
@@ -32,60 +31,25 @@ const allCategories: { [lang: string]: string[] } = {
     'Education',
     'Entertainment',
     'Astrology',
-  ],
-  hi: [
-    'India News',
-    'World News',
-    'States',
-    'Sports',
-    'Bollywood',
-    'Television',
-    'Tamil Cinema',
-    'Bhojpuri Cinema',
-    'Astro',
-    'Religion',
-    'Business',
-    'Gadgets',
-    'Life Style',
-    'Health',
-    'Technology',
-    'Education',
-    'Jobs',
-    'Coronavirus',
-    'Agricultures',
-    'GK',
-  ],
-};
-
-const languages = [
-    { value: 'en', label: 'English' },
-    { value: 'hi', label: 'Hindi' },
-];
+  ];
 
 export default function Home() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState('en');
-  const [selectedCategory, setSelectedCategory] = useState(allCategories['en'][0]);
+  const [selectedCategory, setSelectedCategory] = useState(allCategories[0]);
   const isFetchingRef = useRef(false);
 
   useEffect(() => {
-    document.documentElement.lang = selectedLanguage;
-
     const getArticles = async () => {
-      if (!selectedCategory || !selectedLanguage || isFetchingRef.current) {
-        return;
-      }
-      
-      if (!allCategories[selectedLanguage].includes(selectedCategory)) {
+      if (!selectedCategory || isFetchingRef.current) {
         return;
       }
 
       isFetchingRef.current = true;
       setIsLoading(true);
       try {
-        const fetchedArticles = await fetchArticles(selectedCategory, selectedLanguage);
+        const fetchedArticles = await fetchArticles(selectedCategory, 'en');
         setArticles(fetchedArticles);
       } catch (error) {
         console.error("Failed to fetch articles:", error);
@@ -96,7 +60,7 @@ export default function Home() {
       }
     };
     getArticles();
-  }, [selectedCategory, selectedLanguage]);
+  }, [selectedCategory]);
 
 
   const filteredArticles = useMemo(() => {
@@ -106,23 +70,14 @@ export default function Home() {
       return matchesSearch;
     });
   }, [searchTerm, articles]);
-
-  const handleLanguageChange = (lang: string) => {
-    if (lang !== selectedLanguage) {
-      setSelectedLanguage(lang);
-      setSelectedCategory(allCategories[lang][0]);
-    }
-  };
   
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
   };
-  
-  const categories = allCategories[selectedLanguage];
 
   return (
     <AppLayout>
-      <div className={cn("flex-1 space-y-8 p-4 md:p-8", selectedLanguage === 'hi' && 'font-hindi')}>
+      <div className="flex-1 space-y-8 p-4 md:p-8">
         <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
           <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-primary">
             {selectedCategory}
@@ -137,24 +92,12 @@ export default function Home() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-             <Select value={selectedLanguage} onValueChange={handleLanguageChange}>
-                <SelectTrigger className="w-full md:w-[120px]">
-                    <SelectValue placeholder="Language" />
-                </SelectTrigger>
-                <SelectContent>
-                    {languages.map((lang) => (
-                    <SelectItem key={lang.value} value={lang.value}>
-                        {lang.label}
-                    </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
             <Select value={selectedCategory} onValueChange={handleCategoryChange}>
               <SelectTrigger className="w-full md:w-[180px]">
                 <SelectValue placeholder="Filter by category" />
               </SelectTrigger>
               <SelectContent>
-                {categories.map((category) => (
+                {allCategories.map((category) => (
                   <SelectItem key={category} value={category}>
                     {category}
                   </SelectItem>

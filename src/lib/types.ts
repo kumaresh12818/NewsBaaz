@@ -10,7 +10,7 @@ export type Article = {
   imageHint: string;
   content: string;
   summary: string;
-  sentiment: 'Positive' | 'Negative' | 'Neutral';
+  sentiment: 'Positive' | 'Negative';
   link: string;
 };
 

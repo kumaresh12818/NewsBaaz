@@ -19,28 +19,6 @@ const rssFeeds: { [lang: string]: { [category: string]: string } } = {
     'Entertainment': 'http://timesofindia.indiatimes.com/rssfeeds/1081479906.cms',
     'Astrology': 'https://timesofindia.indiatimes.com/rssfeeds/65857041.cms',
   },
-  hi: {
-    'India News': 'https://www.abplive.com/news/india/feed',
-    'World News': 'https://www.abplive.com/news/world/feed',
-    'States': 'https://www.abplive.com/states/feed',
-    'Sports': 'https://www.abplive.com/sports/feed',
-    'Bollywood': 'https://www.abplive.com/entertainment/bollywood/feed',
-    'Television': 'https://www.abplive.com/entertainment/television/feed',
-    'Tamil Cinema': 'https://www.abplive.com/entertainment/tamil-cinema/feed',
-    'Bhojpuri Cinema': 'https://www.abplive.com/entertainment/bhojpuri-cinema/feed',
-    'Astro': 'https://www.abplive.com/astro/feed',
-    'Religion': 'https://www.abplive.com/lifestyle/religion/feed',
-    'Business': 'https://www.abplive.com/business/feed',
-    'Gadgets': 'https://www.abplive.com/technology/gadgets/feed',
-    'Life Style': 'https://www.abplive.com/lifestyle/feed',
-    'Health': 'https://www.abplive.com/lifestyle/health/feed',
-    'Technology': 'https://www.abplive.com/technology/feed',
-    'Education': 'https://www.abplive.com/education/feed',
-    'Jobs': 'https://www.abplive.com/education/jobs/feed',
-    'Coronavirus': 'https://www.abplive.com/latest-news/coronavirus/feed',
-    'Agricultures': 'https://www.abplive.com/agriculture/feed',
-    'GK': 'https://www.abplive.com/gk/feed',
-  }
 };
 
 export async function GET(request: NextRequest) {
@@ -65,9 +43,6 @@ export async function GET(request: NextRequest) {
     const feed = await parser.parseURL(feedUrl);
     
     let source = 'Times of India';
-    if (lang === 'hi') {
-      source = 'ABP Live';
-    }
     
     const itemsWithCategory = feed.items.map(item => ({
       ...item,

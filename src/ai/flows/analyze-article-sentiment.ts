@@ -22,7 +22,7 @@ export type AnalyzeArticleSentimentInput = z.infer<
 
 const AnalyzeArticleSentimentOutputSchema = z.object({
   sentiment:
-    z.enum(['positive', 'negative', 'neutral']).describe('The sentiment of the article: positive, negative, or neutral.'),
+    z.enum(['positive', 'negative']).describe('The sentiment of the article: positive or negative.'),
   summary: z.string().describe('A short summary of the article.'),
 });
 export type AnalyzeArticleSentimentOutput = z.infer<
@@ -40,14 +40,14 @@ const prompt = ai.definePrompt({
   input: {schema: AnalyzeArticleSentimentInputSchema},
   output: {schema: AnalyzeArticleSentimentOutputSchema},
   prompt: `You are a news analyst tasked with determining the sentiment of news articles.
-  Analyze the following article content and determine if the sentiment is positive, negative, or neutral.
+  Analyze the following article content and determine if the sentiment is positive or negative.
   Also, provide a short summary of the article.
 
   Article Content: {{{articleContent}}}
 
   Respond with the sentiment and summary in the following JSON format:
   {
-    "sentiment": "positive | negative | neutral",
+    "sentiment": "positive | negative",
     "summary": "A short summary of the article."
   }`,
 });

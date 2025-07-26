@@ -2,17 +2,6 @@ import type { Article } from './types';
 import type { Item } from 'rss-parser';
 
 function extractImageUrl(content: string, item: any, source: string): string {
-  // For ABP Live (Hindi)
-  if (source === 'ABP Live') {
-    if (item.enclosure?.url) {
-      return item.enclosure.url;
-    }
-    // Fallback for ABP which sometimes has the image in media:content
-    if (item['media:content']?.['$']?.url) {
-      return item['media:content']['$'].url;
-    }
-  }
-  
   if (item.content) {
     const imgRegex = /<img[^>]+src="([^">]+)"/;
     const match = item.content.match(imgRegex);
@@ -29,6 +18,15 @@ function extractImageUrl(content: string, item: any, source: string): string {
     return item['media:thumbnail']['$'].url;
   }
   
+  // ABP live specific
+  if (content) {
+    const imgRegex = /<img[^>]+src="([^">]+)"/;
+    const match = content.match(imgRegex);
+    if (match) {
+        return match[1];
+    }
+  }
+
   return 'https://placehold.co/600x400.png';
 }
 
@@ -55,7 +53,7 @@ export async function fetchArticles(category: string, lang: string = 'en'): Prom
         imageHint: 'news article',
         content: item.contentSnippet || item.content || 'No content available.',
         summary: summary,
-        sentiment: 'Neutral', // Placeholder sentiment
+        sentiment: 'Positive', // Placeholder sentiment
         link: item.link || '#',
       };
     });

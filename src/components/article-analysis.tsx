@@ -16,7 +16,6 @@ interface ArticleAnalysisProps {
 const sentimentColors: { [key: string]: string } = {
   Positive: 'bg-green-500/20 text-green-400 border-green-500/30',
   Negative: 'bg-red-500/20 text-red-400 border-red-500/30',
-  Neutral: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
 };
 
 export function ArticleAnalysis({ articleContent }: ArticleAnalysisProps) {
@@ -68,7 +67,7 @@ export function ArticleAnalysis({ articleContent }: ArticleAnalysisProps) {
               <CardTitle className="flex justify-between items-center">
                 <span>Analysis Results</span>
                 <Badge
-                  className={cn('text-sm font-bold', sentimentColors[analysis.sentiment] || sentimentColors.Neutral)}
+                  className={cn('text-sm font-bold', sentimentColors[analysis.sentiment] || sentimentColors.Negative)}
                 >
                   {analysis.sentiment}
                 </Badge>

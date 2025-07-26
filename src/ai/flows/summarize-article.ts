@@ -24,7 +24,7 @@ const SummarizeArticleOutputSchema = z.object({
   summary: z.string().describe('A concise summary of the article.'),
   sentiment: z
     .string()
-    .describe('The sentiment of the article (e.g., positive, negative, neutral).'),
+    .describe('The sentiment of the article (e.g., positive, negative).'),
 });
 export type SummarizeArticleOutput = z.infer<typeof SummarizeArticleOutputSchema>;
 
@@ -36,7 +36,7 @@ const summarizeArticlePrompt = ai.definePrompt({
   name: 'summarizeArticlePrompt',
   input: {schema: SummarizeArticleInputSchema},
   output: {schema: SummarizeArticleOutputSchema},
-  prompt: `You are a news article summarizer. Summarize the following article in a concise manner, and determine the sentiment of the article.
+  prompt: `You are a news article summarizer. Summarize the following article in a concise manner, and determine the sentiment of the article as 'Positive' or 'Negative'.
 
 Article:
 {{{articleContent}}}

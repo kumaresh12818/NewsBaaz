@@ -28,7 +28,7 @@ export const allArticles: Article[] = [
     imageHint: 'stock market',
     content: `The global economy in 2024 is a mixed bag of challenges and opportunities. While some regions are experiencing robust growth driven by the tech sector, others are grappling with inflation and supply chain disruptions. This analysis delves into the key economic indicators, market trends, and policy changes shaping the world economy. Emerging markets are showing surprising resilience, but geopolitical tensions continue to cast a shadow of uncertainty over international trade.`,
     summary: 'An analysis of 2024\'s global economy, highlighting growth in some areas, challenges like inflation elsewhere, and geopolitical uncertainty.',
-    sentiment: 'Neutral',
+    sentiment: 'Positive',
     link: '#',
   },
   {
@@ -88,7 +88,7 @@ export const allArticles: Article[] = [
     imageHint: 'home office',
     content: `Remote work is no longer a temporary measure but a permanent fixture of the modern workforce. In 2024, companies are grappling with the challenges of a hybrid model, from maintaining company culture to ensuring cybersecurity. This piece examines the tools, strategies, and policies that are defining the future of work. While flexibility is a major benefit, issues of digital presenteeism and burnout are becoming more prominent, requiring new management approaches.`,
     summary: 'A look at the permanent shift to remote and hybrid work in 2024, exploring challenges in culture, security, and employee well-being.',
-    sentiment: 'Neutral',
+    sentiment: 'Positive',
     link: '#',
   },
   {
