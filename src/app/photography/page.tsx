@@ -9,12 +9,10 @@ import { Input } from '@/components/ui/input';
 import { Search, RefreshCw, Camera } from 'lucide-react';
 import { fetchArticles } from '@/lib/rss-parser';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useLanguage } from '@/context/language-context';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
 export default function PhotographyPage() {
-  const { selectedLang } = useLanguage();
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -32,7 +30,8 @@ export default function PhotographyPage() {
       }
 
       try {
-        const fetchedArticles = await fetchArticles('ALL', selectedLang, 'photography');
+        // Always fetch photography with 'en' as it's not language specific
+        const fetchedArticles = await fetchArticles('ALL', 'en', 'photography');
         setArticles(fetchedArticles);
         if (refreshTrigger > 0) {
           toast({ title: "Feed updated!" });
@@ -49,7 +48,7 @@ export default function PhotographyPage() {
 
     getArticles();
     
-  }, [selectedLang, refreshTrigger]);
+  }, [refreshTrigger, toast]);
 
   const handleRefresh = () => {
     setRefreshTrigger(t => t + 1);
@@ -100,7 +99,7 @@ export default function PhotographyPage() {
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8">
               {filteredArticles.map((article: Article) => (
-                <ArticleCard key={article.id} article={article} lang={selectedLang} />
+                <ArticleCard key={article.id} article={article} />
               ))}
             </div>
           )}
