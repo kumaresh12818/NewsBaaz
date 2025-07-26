@@ -18,6 +18,7 @@ const rssFeeds: { [lang: string]: { [category: string]: string } } = {
     'Education': 'http://timesofindia.indiatimes.com/rssfeeds/913168846.cms',
     'Entertainment': 'http://timesofindia.indiatimes.com/rssfeeds/1081479906.cms',
     'Astrology': 'https://timesofindia.indiatimes.com/rssfeeds/65857041.cms',
+    'KOLKATA': 'http://timesofindia.indiatimes.com/rssfeeds/-2128830821.cms',
   },
   bn: {
     'India News': 'https://bengali.abplive.com/news/india/feed',

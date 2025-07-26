@@ -32,6 +32,7 @@ const allCategories: { [lang: string]: string[] } = {
     'Education',
     'Entertainment',
     'Astrology',
+    'KOLKATA',
   ],
   bn: [
     'India News',
