@@ -58,17 +58,15 @@ export default function Home() {
     <AppLayout>
       <div className="flex-1 space-y-8 p-4 md:p-8">
         <div className="container max-w-3xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+          <div className="flex items-center justify-between">
             <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-primary flex items-center gap-3 glass rounded-lg px-4 py-2 shadow-lg shadow-cyan-500/50">
               <Newspaper className="h-10 w-10" />
               News Feed
             </h1>
-            <div className="flex w-full md:w-auto items-center space-x-2">
-               <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing}>
-                <RefreshCw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
-                <span className="sr-only">Refresh News</span>
-              </Button>
-            </div>
+            <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing}>
+              <RefreshCw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
+              <span className="sr-only">Refresh News</span>
+            </Button>
           </div>
           {isLoading ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8">
