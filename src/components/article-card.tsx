@@ -33,10 +33,10 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
           </CardHeader>
         )}
         <CardContent className="p-4 space-y-2">
-            <h3 className="font-headline text-xl leading-tight text-foreground group-hover:underline break-words">
+            <h3 className="font-headline text-xl leading-tight text-foreground group-hover:underline break-all">
               {article.title}
             </h3>
-          <p className="text-muted-foreground text-sm line-clamp-3 break-words">{article.summary}</p>
+          <p className="text-muted-foreground text-sm line-clamp-3 break-all">{article.summary}</p>
         </CardContent>
       </Card>
     </a>
