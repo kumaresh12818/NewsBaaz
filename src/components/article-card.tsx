@@ -53,11 +53,6 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
     
     const contentToSummarize = article.content || article.summary;
     if (!contentToSummarize || contentToSummarize.trim() === '' || contentToSummarize === 'No content available.') {
-      toast({
-        variant: 'destructive',
-        title: 'Summarization Failed',
-        description: 'AI is not supported in this article.',
-      });
       return;
     }
 
