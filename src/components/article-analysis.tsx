@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wand2, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/context/language-context';
 
 interface ArticleAnalysisProps {
   articleContent: string;
@@ -15,12 +16,14 @@ export function ArticleAnalysis({ articleContent }: ArticleAnalysisProps) {
   const [analysis, setAnalysis] = useState<SummarizeArticleOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { selectedLang } = useLanguage();
 
   const handleAnalysis = async () => {
     setIsLoading(true);
     setAnalysis(null);
     try {
-      const result = await summarizeArticle({ articleContent });
+      const language = selectedLang === 'bn' ? 'Bengali' : 'English';
+      const result = await summarizeArticle({ articleContent, language });
       setAnalysis(result);
     } catch (error) {
       console.error('AI analysis failed:', error);

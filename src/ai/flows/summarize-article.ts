@@ -17,6 +17,7 @@ const SummarizeArticleInputSchema = z.object({
   articleContent: z
     .string()
     .describe('The content of the article to be summarized.'),
+  language: z.string().optional().describe('The language for the summary. E.g., "Bengali" or "English". Defaults to English if not provided.'),
 });
 export type SummarizeArticleInput = z.infer<typeof SummarizeArticleInputSchema>;
 
@@ -34,6 +35,11 @@ const summarizeArticlePrompt = ai.definePrompt({
   input: {schema: SummarizeArticleInputSchema},
   output: {schema: SummarizeArticleOutputSchema},
   prompt: `You are a news article summarizer. Summarize the following article in a concise manner.
+{{#if language}}
+Please provide the summary in {{language}}.
+{{else}}
+Please provide the summary in English.
+{{/if}}
 
 Article:
 {{{articleContent}}}

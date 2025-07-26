@@ -71,7 +71,8 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
 
     setIsLoading(true);
     try {
-      const result = await summarizeArticle({ articleContent: contentToSummarize });
+      const language = lang === 'bn' ? 'Bengali' : 'English';
+      const result = await summarizeArticle({ articleContent: contentToSummarize, language });
       setAnalysis(result);
     } catch (error) {
       console.error('AI analysis failed:', error);
