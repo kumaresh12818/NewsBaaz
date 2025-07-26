@@ -52,27 +52,29 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   
-  const [categories, setCategories] = useState(allCategories[selectedLang]);
+  const categories = allCategories[selectedLang];
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const isFetchingRef = useRef(false);
 
   useEffect(() => {
-    // When language changes, update categories and reset selected category
+    // When language changes, update the selected category to a valid one for the new language.
     const newCategories = allCategories[selectedLang];
-    setCategories(newCategories);
-    setSelectedCategory(newCategories[0]);
-  }, [selectedLang]);
+    if (!newCategories.includes(selectedCategory)) {
+        setSelectedCategory(newCategories[0]);
+    }
+  }, [selectedLang, selectedCategory]);
 
   useEffect(() => {
     const getArticles = async () => {
-      // Don't fetch if category isn't set or if we're already fetching
-      if (!selectedCategory || isFetchingRef.current) {
+      // Don't fetch if we're already fetching
+      if (isFetchingRef.current) {
         return;
       }
-
-      // Ensure the selected category is valid for the current language
-      if (!allCategories[selectedLang].includes(selectedCategory)) {
-        // This can happen during language transition, just wait for the next render
+      
+      const currentCategories = allCategories[selectedLang];
+      // Ensure the selected category is valid for the current language before fetching
+      if (!currentCategories.includes(selectedCategory)) {
+        // This can happen during transition, just wait for the category to be updated.
         return;
       }
 
