@@ -32,19 +32,27 @@ const rssFeeds: { [key: string]: { [category: string]: string } } = {
       'Astro': 'https://bengali.abplive.com/astro/feed',
       'Business': 'https://bengali.abplive.com/business/feed',
     }
+  },
+  photography: {
+    en: {
+      'Nature': 'https://www.flickr.com/services/feeds/photos_public.gne?tags=nature&format=rss_200',
+    },
+    bn: {
+      'Nature': 'https://www.flickr.com/services/feeds/photos_public.gne?tags=nature&format=rss_200',
+    }
   }
 };
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const section = 'news'; // Hardcoded to news
+  const section = searchParams.get('section') || 'news';
   const lang = searchParams.get('lang') || 'en';
   const category = searchParams.get('category');
 
-  let feedsForSection = rssFeeds.news[lang as 'en' | 'bn'];
+  let feedsForSection = rssFeeds[section as keyof typeof rssFeeds]?.[lang as 'en' | 'bn'];
 
   if (!feedsForSection) {
-    return NextResponse.json({ error: 'Invalid language' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid section or language' }, { status: 400 });
   }
   
   const defaultCategory = Object.keys(feedsForSection)[0];
@@ -57,11 +65,6 @@ export async function GET(request: NextRequest) {
 
   try {
     const feed = await parser.parseURL(feedUrl);
-    
-    let source = ''; // Removed hardcoded source
-    if (lang === 'bn') {
-        source = ''; // Removed hardcoded source
-    }
     
     const itemsWithCategory = feed.items.map(item => ({
       ...item,
