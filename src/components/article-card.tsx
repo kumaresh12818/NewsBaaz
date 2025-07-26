@@ -40,12 +40,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
             </h3>
           <p className="text-muted-foreground text-sm line-clamp-3">{article.summary}</p>
         </CardContent>
-        <CardFooter className="p-4 flex justify-between items-center">
-          <Badge
-            className={cn('text-xs font-bold uppercase tracking-wider', sentimentColors[article.sentiment])}
-          >
-            {article.sentiment}
-          </Badge>
+        <CardFooter className="p-4 flex justify-end items-center">
           <div
             className="flex items-center gap-1 text-xs text-muted-foreground group-hover:text-primary"
           >
