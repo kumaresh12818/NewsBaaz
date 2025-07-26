@@ -54,9 +54,9 @@ export async function GET(request: NextRequest) {
   try {
     const feed = await parser.parseURL(feedUrl);
     
-    let source = 'Times of India';
+    let source = ''; // Removed hardcoded source
     if (lang === 'bn') {
-        source = 'ABP Live';
+        source = ''; // Removed hardcoded source
     }
     
     const itemsWithCategory = feed.items.map(item => ({

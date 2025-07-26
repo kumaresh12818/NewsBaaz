@@ -62,11 +62,11 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
             </h3>
         </a>
         <div className="flex justify-between items-center pt-2">
-            <p className="text-muted-foreground text-xs">{article.source}</p>
+            {article.source && <p className="text-muted-foreground text-xs">{article.source}</p>}
             <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full"
+                className="rounded-full ml-auto"
                 onClick={handleBookmarkClick}
             >
                 <Bookmark className={`h-5 w-5 ${bookmarked ? 'text-primary fill-primary' : ''}`} />

@@ -49,7 +49,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
                   })}
                 </time>
               </div>
-              <span className='font-medium'>{article.source}</span>
+              {article.source && <span className='font-medium'>{article.source}</span>}
             </div>
           </div>
 

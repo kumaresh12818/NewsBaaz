@@ -57,7 +57,7 @@ export async function fetchArticles(category: string, lang: string = 'en'): Prom
         slug: item.link ? new URL(item.link).pathname.split('/').pop()! : `article-${index}`,
         title: item.title || 'No title',
         author: item.creator || item.source,
-        source: item.source,
+        source: item.source || '',
         publishedAt: item.isoDate || new Date().toISOString(),
         category: item.category,
         imageUrl: imageUrl,
