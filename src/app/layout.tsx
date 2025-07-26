@@ -4,6 +4,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { LanguageProvider } from '@/context/language-context';
 import { ThemeProvider } from '@/components/theme-provider';
+import { BookmarkProvider } from '@/context/bookmark-context';
 
 export const metadata: Metadata = {
   title: 'NewsBlend',
@@ -30,7 +31,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LanguageProvider>
-            {children}
+            <BookmarkProvider>
+              {children}
+            </BookmarkProvider>
           </LanguageProvider>
           <Toaster />
         </ThemeProvider>
