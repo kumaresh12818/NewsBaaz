@@ -9,11 +9,6 @@ interface ArticleCardProps {
   article: Article;
 }
 
-const sentimentColors = {
-  Positive: 'bg-green-500/20 text-green-400 border-green-500/30',
-  Negative: 'bg-red-500/20 text-red-400 border-red-500/30',
-};
-
 export function ArticleCard({ article }: ArticleCardProps) {
   return (
     <a
@@ -40,14 +35,6 @@ export function ArticleCard({ article }: ArticleCardProps) {
             </h3>
           <p className="text-muted-foreground text-sm line-clamp-3">{article.summary}</p>
         </CardContent>
-        <CardFooter className="p-4 flex justify-end items-center">
-          <div
-            className="flex items-center gap-1 text-xs text-muted-foreground group-hover:text-primary"
-          >
-            {article.source}
-            <ExternalLink className="h-3 w-3" />
-          </div>
-        </CardFooter>
       </Card>
     </a>
   );
