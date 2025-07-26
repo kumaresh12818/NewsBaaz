@@ -3,22 +3,21 @@ import type { Article } from './types';
 import type { Item } from 'rss-parser';
 
 function extractImageUrl(content: string, item: any, source: string): string {
-    if (item.content) {
-      const imgRegex = /<img[^>]+src="([^">]+)"/;
-      const match = item.content.match(imgRegex);
-      if (match) return match[1];
-    }
-    
-    if (item.enclosure?.url) {
-      return item.enclosure.url;
-    }
-    if (item['media:content']?.['$']?.url) {
-      return item['media:content']['$'].url;
-    }
-    if (item['media:thumbnail']?.['$']?.url) {
-      return item['media:thumbnail']['$'].url;
-    }
-  
+  if (item.enclosure?.url) {
+    return item.enclosure.url;
+  }
+  if (item['media:content']?.['$']?.url) {
+    return item['media:content']['$'].url;
+  }
+  if (item['media:thumbnail']?.['$']?.url) {
+    return item['media:thumbnail']['$'].url;
+  }
+  if (item.content) {
+    const imgRegex = /<img[^>]+src="([^">]+)"/;
+    const match = item.content.match(imgRegex);
+    if (match) return match[1];
+  }
+
   // ABP live specific
   if (source === 'ABP Live' && content) {
     const imgRegex = /<img[^>]+src="([^">]+)"/;
