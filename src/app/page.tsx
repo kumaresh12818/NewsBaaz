@@ -6,7 +6,7 @@ import { AppLayout } from '@/components/layout/app-layout';
 import { ArticleCard } from '@/components/article-card';
 import type { Article } from '@/lib/types';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
+import { Search, RefreshCw } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -17,6 +17,8 @@ import {
 import { fetchArticles } from '@/lib/rss-parser';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useLanguage } from '@/context/language-context';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 const allCategories: { [lang: string]: string[] } = {
   en: [
@@ -51,10 +53,13 @@ export default function Home() {
   const { selectedLang } = useLanguage();
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   
   const [categories, setCategories] = useState(allCategories[selectedLang]);
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const { toast } = useToast();
   
   useEffect(() => {
     const newCategories = allCategories[selectedLang];
@@ -62,30 +67,43 @@ export default function Home() {
 
     let categoryToFetch = selectedCategory;
 
-    // If the current category is not in the new list, update it to the first one.
     if (!newCategories.includes(selectedCategory)) {
       categoryToFetch = newCategories[0];
       setSelectedCategory(categoryToFetch);
-    }
-    
-    const getArticles = async () => {
-      setIsLoading(true);
-      try {
-        const fetchedArticles = await fetchArticles(categoryToFetch, selectedLang);
-        setArticles(fetchedArticles);
-      } catch (error) {
-        console.error("Failed to fetch articles:", error);
-        setArticles([]);
-      } finally {
-        setIsLoading(false);
+    } else {
+       const getArticles = async () => {
+        if (refreshTrigger === 0) { // Only show full loading skeleton on initial load
+          setIsLoading(true);
+        } else {
+          setIsRefreshing(true);
+        }
+
+        try {
+          const fetchedArticles = await fetchArticles(categoryToFetch, selectedLang);
+          setArticles(fetchedArticles);
+          if (refreshTrigger > 0) {
+            toast({ title: "Feed updated!" });
+          }
+        } catch (error) {
+          console.error("Failed to fetch articles:", error);
+          setArticles([]);
+          toast({ variant: "destructive", title: "Error", description: "Failed to fetch articles." });
+        } finally {
+          setIsLoading(false);
+          setIsRefreshing(false);
+        }
+      };
+
+      if (categoryToFetch) {
+        getArticles();
       }
-    };
-
-    if (categoryToFetch) {
-      getArticles();
     }
-  }, [selectedLang, selectedCategory]);
+  }, [selectedLang, selectedCategory, refreshTrigger]);
 
+  const handleRefresh = () => {
+    setRefreshTrigger(t => t + 1);
+  };
+  
   const filteredArticles = useMemo(() => {
     return articles.filter((article) => {
       const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -128,6 +146,10 @@ export default function Home() {
                   ))}
                 </SelectContent>
               </Select>
+               <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing}>
+                <RefreshCw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
+                <span className="sr-only">Refresh News</span>
+              </Button>
             </div>
           </div>
           {isLoading ? (
