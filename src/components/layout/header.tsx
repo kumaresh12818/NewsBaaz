@@ -2,7 +2,7 @@
 
 import { Menu, Newspaper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -33,6 +33,9 @@ export function AppHeader() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="glass p-0">
+            <SheetHeader className='p-4'>
+               <SheetTitle className='sr-only'>Mobile Navigation Menu</SheetTitle>
+            </SheetHeader>
             <SidebarNav isMobile={true} />
           </SheetContent>
         </Sheet>
