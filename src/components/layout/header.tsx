@@ -17,6 +17,7 @@ import { SidebarNav } from './sidebar-nav';
 import Link from 'next/link';
 import { mockUser } from '@/lib/mock-data';
 import { useLanguage } from '@/context/language-context';
+import { ThemeToggle } from '../theme-toggle';
 
 export function AppHeader() {
   const { handleLanguageChange } = useLanguage();
@@ -48,6 +49,7 @@ export function AppHeader() {
       </div>
       
       <div className="flex w-full items-center justify-end gap-4">
+        <ThemeToggle />
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon">
