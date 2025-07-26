@@ -2,14 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Newspaper, Home, Bookmark, Settings, LogIn, Camera } from 'lucide-react';
+import { Newspaper, Home, Bookmark, Settings, LogIn } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
 const navItems = [
   { href: '/', label: 'News', icon: Home },
-  { href: '/photography', label: 'Photography', icon: Camera },
   { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark },
   { href: '/settings', label: 'Settings', icon: Settings },
 ];

@@ -32,38 +32,19 @@ const rssFeeds: { [key: string]: { [category: string]: string } } = {
       'Astro': 'https://bengali.abplive.com/astro/feed',
       'Business': 'https://bengali.abplive.com/business/feed',
     }
-  },
-  photography: {
-    'Admiring Light': 'https://admiringlight.com/blog/feed/',
-    'DPReview': 'https://www.dpreview.com/feeds/reviews.xml',
-    'Digital Photography School': 'https://digital-photography-school.com/feed/',
-    'ePHOTOzine': 'https://www.ephotozine.com/full.xml',
-    'Fstoppers': 'https://fstoppers.com/feed',
-    'Light Stalking': 'https://www.lightstalking.com/feed/',
-    'PetaPixel': 'https://petapixel.com/feed/',
-    'Phillip Reeve': 'https://phillipreeve.net/blog/feed/',
-    'Photography Life': 'https://photographylife.com/feed/',
-    'Photofocus': 'https://photofocus.com/feed/',
-    'PictureCorrect': 'https://feeds.feedburner.com/picturecorrect',
-    'Shutterbug': 'https://www.shutterbug.com/rss.xml',
   }
 };
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const section = searchParams.get('section') || 'news';
+  const section = 'news'; // Hardcoded to news
   const lang = searchParams.get('lang') || 'en';
   const category = searchParams.get('category');
 
-  let feedsForSection;
-  if (section === 'news') {
-    feedsForSection = rssFeeds.news[lang as 'en' | 'bn'];
-  } else if (section === 'photography') {
-    feedsForSection = rssFeeds.photography;
-  }
+  let feedsForSection = rssFeeds.news[lang as 'en' | 'bn'];
 
   if (!feedsForSection) {
-    return NextResponse.json({ error: 'Invalid section or language' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid language' }, { status: 400 });
   }
   
   const defaultCategory = Object.keys(feedsForSection)[0];
