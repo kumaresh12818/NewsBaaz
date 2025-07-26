@@ -55,6 +55,10 @@ const rssFeeds: { [key: string]: { [category: string]: string | string[] } } = {
         'https://petapixel.com/feed/',
         'https://www.thisiscolossal.com/feed/',
         'https://abduzeedo.com/rss.xml',
+        'https://www.magnumphotos.com/feed/',
+        'https://www.iso1200.com/feeds/posts/default',
+        'https://www.featureshoot.com/feed/',
+        'https://streetphotographymagazine.com/feed/',
       ]
     },
     bn: {
@@ -78,6 +82,10 @@ const rssFeeds: { [key: string]: { [category: string]: string | string[] } } = {
         'https://petapixel.com/feed/',
         'https://www.thisiscolossal.com/feed/',
         'https://abduzeedo.com/rss.xml',
+        'https://www.magnumphotos.com/feed/',
+        'https://www.iso1200.com/feeds/posts/default',
+        'https://www.featureshoot.com/feed/',
+        'https://streetphotographymagazine.com/feed/',
       ]
     }
   }
