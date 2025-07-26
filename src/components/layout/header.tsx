@@ -20,7 +20,12 @@ import { useLanguage } from '@/context/language-context';
 import { ThemeToggle } from '../theme-toggle';
 
 export function AppHeader() {
-  const { handleLanguageChange } = useLanguage();
+  const { selectedLang, handleLanguageChange } = useLanguage();
+
+  const toggleLanguage = () => {
+    const newLang = selectedLang === 'en' ? 'bn' : 'en';
+    handleLanguageChange(newLang);
+  };
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/60 px-4 backdrop-blur-lg md:px-6">
@@ -50,22 +55,10 @@ export function AppHeader() {
       
       <div className="flex w-full items-center justify-end gap-4">
         <ThemeToggle />
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon">
-                <Globe className="h-5 w-5" />
-                <span className="sr-only">Select Language</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onSelect={() => handleLanguageChange('en')}>
-                English
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => handleLanguageChange('bn')}>
-                Bengali
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <Button variant="outline" size="icon" onClick={toggleLanguage}>
+          <Globe className="h-5 w-5" />
+          <span className="sr-only">Toggle Language</span>
+        </Button>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
