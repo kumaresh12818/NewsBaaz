@@ -41,9 +41,15 @@ function extractImageUrl(content: string, item: any, source: string): string {
   return 'https://placehold.co/600x400.png';
 }
 
-export async function fetchArticles(category: string, lang: string = 'en'): Promise<Article[]> {
+export async function fetchArticles(
+  category: string,
+  lang: string = 'en',
+  section: string = 'news'
+): Promise<Article[]> {
   try {
-    const response = await fetch(`/api/rss?category=${encodeURIComponent(category)}&lang=${lang}`);
+    const response = await fetch(
+      `/api/rss?section=${section}&category=${encodeURIComponent(category)}&lang=${lang}`
+    );
     if (!response.ok) {
       throw new Error(`Failed to fetch articles: ${response.statusText}`);
     }
@@ -52,6 +58,8 @@ export async function fetchArticles(category: string, lang: string = 'en'): Prom
     return items.map((item, index) => {
       const imageUrl = extractImageUrl(item.content || '', item, item.source);
       const summary = item.contentSnippet || 'No summary available.';
+      const cleanSummary = summary.replace(/<[^>]*>?/gm, '');
+
       return {
         id: item.guid || item.link || index.toString(),
         slug: item.link ? new URL(item.link).pathname.split('/').pop()! : `article-${index}`,
@@ -61,9 +69,9 @@ export async function fetchArticles(category: string, lang: string = 'en'): Prom
         publishedAt: item.isoDate || new Date().toISOString(),
         category: item.category,
         imageUrl: imageUrl,
-        imageHint: 'news article',
+        imageHint: section === 'photography' ? 'photography camera' : 'news article',
         content: item.contentSnippet || item.content || 'No content available.',
-        summary: summary,
+        summary: cleanSummary,
         sentiment: 'Positive', // Placeholder sentiment
         link: item.link || '#',
       };

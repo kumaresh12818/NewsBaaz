@@ -6,7 +6,7 @@ import { AppLayout } from '@/components/layout/app-layout';
 import { ArticleCard } from '@/components/article-card';
 import type { Article } from '@/lib/types';
 import { Input } from '@/components/ui/input';
-import { Search, RefreshCw, Newspaper } from 'lucide-react';
+import { Search, RefreshCw, Camera } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -16,71 +16,44 @@ import {
 } from '@/components/ui/select';
 import { fetchArticles } from '@/lib/rss-parser';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useLanguage } from '@/context/language-context';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
-const allCategories: { [lang: string]: string[] } = {
-  en: [
-    'Top Stories',
-    'Recent Stories',
-    'India',
-    'KOLKATA',
-    'World',
-    'Business',
-    'Sports',
-    'Cricket',
-    'Science',
-    'Technology',
-    'Education',
-    'Entertainment',
-    'Astrology',
-  ],
-  bn: [
-    'India News',
-    'District News',
-    'Kolkata',
-    'States',
-    'World News',
-    'Sports',
-    'ENTERTAINMENT',
-    'Astro',
-    'Business',
-  ]
-};
+const photographyCategories = [
+    'Admiring Light',
+    'DPReview',
+    'Digital Photography School',
+    'ePHOTOzine',
+    'Fstoppers',
+    'Light Stalking',
+    'PetaPixel',
+    'Phillip Reeve',
+    'Photography Life',
+    'Photofocus',
+    'PictureCorrect',
+    'Shutterbug',
+];
 
-export default function Home() {
-  const { selectedLang } = useLanguage();
+export default function PhotographyPage() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   
-  const [categories, setCategories] = useState(allCategories[selectedLang]);
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  const [selectedCategory, setSelectedCategory] = useState(photographyCategories[0]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const { toast } = useToast();
   
   useEffect(() => {
-    const newCategories = allCategories[selectedLang];
-    setCategories(newCategories);
-
-    let categoryToFetch = selectedCategory;
-
-    if (!newCategories.includes(selectedCategory)) {
-      categoryToFetch = newCategories[0];
-      setSelectedCategory(categoryToFetch);
-    }
-    
     const getArticles = async () => {
-      if (refreshTrigger === 0) { // Only show full loading skeleton on initial load
+      if (refreshTrigger === 0) {
         setIsLoading(true);
       } else {
         setIsRefreshing(true);
       }
 
       try {
-        const fetchedArticles = await fetchArticles(categoryToFetch, selectedLang, 'news');
+        const fetchedArticles = await fetchArticles(selectedCategory, 'en', 'photography');
         setArticles(fetchedArticles);
         if (refreshTrigger > 0) {
           toast({ title: "Feed updated!" });
@@ -95,11 +68,10 @@ export default function Home() {
       }
     };
 
-    if (categoryToFetch) {
+    if (selectedCategory) {
       getArticles();
     }
-    
-  }, [selectedLang, selectedCategory, refreshTrigger]);
+  }, [selectedCategory, refreshTrigger]);
 
   const handleRefresh = () => {
     setRefreshTrigger(t => t + 1);
@@ -122,9 +94,9 @@ export default function Home() {
       <div className="flex-1 space-y-8 p-4 md:p-8">
         <div className="container max-w-3xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-            <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-primary flex items-center gap-3">
-              <Newspaper className="h-10 w-10" />
-              {selectedCategory}
+             <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-primary flex items-center gap-3">
+              <Camera className="h-10 w-10" />
+              Photography
             </h1>
             <div className="flex w-full md:w-auto items-center space-x-2">
               <div className="relative w-full md:w-64">
@@ -138,10 +110,10 @@ export default function Home() {
               </div>
               <Select value={selectedCategory} onValueChange={handleCategoryChange}>
                 <SelectTrigger className="w-full md:w-[180px]">
-                  <SelectValue placeholder="Filter by category" />
+                  <SelectValue placeholder="Filter by source" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category) => (
+                  {photographyCategories.map((category) => (
                     <SelectItem key={category} value={category}>
                       {category}
                     </SelectItem>
@@ -150,7 +122,7 @@ export default function Home() {
               </Select>
                <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing}>
                 <RefreshCw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
-                <span className="sr-only">Refresh News</span>
+                <span className="sr-only">Refresh Feed</span>
               </Button>
             </div>
           </div>
@@ -168,7 +140,7 @@ export default function Home() {
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8">
               {filteredArticles.map((article: Article) => (
-                <ArticleCard key={article.id} article={article} lang={selectedLang} />
+                <ArticleCard key={article.id} article={article} />
               ))}
             </div>
           )}
