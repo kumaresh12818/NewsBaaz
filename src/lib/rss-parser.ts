@@ -48,6 +48,23 @@ function extractImageUrl(content: string, item: any, source: string): string {
   return 'https://placehold.co/600x400.png';
 }
 
+function cleanSource(source: string): string {
+  const sourcesToBlank = [
+    'Times of India',
+    'ABP Live',
+  ];
+
+  if (sourcesToBlank.some(s => source.includes(s))) {
+    return '';
+  }
+
+  return source;
+}
+
+function cleanTitle(title: string): string {
+  return title.replace(/recent uploads tagged nature/i, '').trim();
+}
+
 export async function fetchArticles(
   category: string,
   lang: string = 'en',
@@ -70,9 +87,9 @@ export async function fetchArticles(
       return {
         id: item.guid || item.link || index.toString(),
         slug: item.link ? new URL(item.link).pathname.split('/').pop()! : `article-${index}`,
-        title: item.title || 'No title',
+        title: cleanTitle(item.title || 'No title'),
         author: item.creator || item.source,
-        source: item.source || '',
+        source: cleanSource(item.source || ''),
         publishedAt: item.isoDate || new Date().toISOString(),
         category: item.category,
         imageUrl: imageUrl,
