@@ -4,7 +4,7 @@ import Parser from 'rss-parser';
 
 const parser = new Parser();
 
-const rssFeeds: { [key: string]: { [category: string]: string } } = {
+const rssFeeds: { [key: string]: { [category: string]: string | string[] } } = {
   news: {
     en: {
       'Top Stories': 'http://timesofindia.indiatimes.com/rssfeedstopstories.cms',
@@ -35,28 +35,32 @@ const rssFeeds: { [key: string]: { [category: string]: string } } = {
   },
   photography: {
     en: {
-      'Nature': 'https://www.flickr.com/services/feeds/photos_public.gne?tags=nature&format=rss_200',
-      'BBC In Pictures': 'https://feeds.bbci.co.uk/news/in_pictures/rss.xml',
-      'Reuters Pictures': 'https://www.reutersagency.com/feed/?best-topics=pictures&post_type=best',
-      'NASA Image of the Day': 'https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss',
-      'NASA APOD': 'https://apod.nasa.gov/apod.rss',
-      'Space.com': 'https://www.space.com/feeds/all',
-      'Hubble News': 'https://hubblesite.org/api/v3/rss/news_release_image',
-      'ESA Space Science': 'https://www.esa.int/rssfeed/Our_Activities/Space_Science',
-      'Earth Observatory': 'https://earthobservatory.nasa.gov/feeds/rss',
-      'Nature.org': 'https://blog.nature.org/science/feed/',
+      'ALL': [
+        'https://www.flickr.com/services/feeds/photos_public.gne?tags=nature&format=rss_200',
+        'https://feeds.bbci.co.uk/news/in_pictures/rss.xml',
+        'https://www.reutersagency.com/feed/?best-topics=pictures&post_type=best',
+        'https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss',
+        'https://apod.nasa.gov/apod.rss',
+        'https://www.space.com/feeds/all',
+        'https://hubblesite.org/api/v3/rss/news_release_image',
+        'https://www.esa.int/rssfeed/Our_Activities/Space_Science',
+        'https://earthobservatory.nasa.gov/feeds/rss',
+        'https://blog.nature.org/science/feed/',
+      ]
     },
     bn: {
-      'Nature': 'https://www.flickr.com/services/feeds/photos_public.gne?tags=nature&format=rss_200',
-      'BBC In Pictures': 'https://feeds.bbci.co.uk/news/in_pictures/rss.xml',
-      'Reuters Pictures': 'https://www.reutersagency.com/feed/?best-topics=pictures&post_type=best',
-      'NASA Image of the Day': 'https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss',
-      'NASA APOD': 'https://apod.nasa.gov/apod.rss',
-      'Space.com': 'https://www.space.com/feeds/all',
-      'Hubble News': 'https://hubblesite.org/api/v3/rss/news_release_image',
-      'ESA Space Science': 'https://www.esa.int/rssfeed/Our_Activities/Space_Science',
-      'Earth Observatory': 'https://earthobservatory.nasa.gov/feeds/rss',
-      'Nature.org': 'https://blog.nature.org/science/feed/',
+      'ALL': [
+        'https://www.flickr.com/services/feeds/photos_public.gne?tags=nature&format=rss_200',
+        'https://feeds.bbci.co.uk/news/in_pictures/rss.xml',
+        'https://www.reutersagency.com/feed/?best-topics=pictures&post_type=best',
+        'https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss',
+        'https://apod.nasa.gov/apod.rss',
+        'https://www.space.com/feeds/all',
+        'https://hubblesite.org/api/v3/rss/news_release_image',
+        'https://www.esa.int/rssfeed/Our_Activities/Space_Science',
+        'https://earthobservatory.nasa.gov/feeds/rss',
+        'https://blog.nature.org/science/feed/',
+      ]
     }
   }
 };
@@ -75,22 +79,39 @@ export async function GET(request: NextRequest) {
   
   const defaultCategory = Object.keys(feedsForSection)[0];
   const finalCategory = category || defaultCategory;
-  const feedUrl = feedsForSection[finalCategory];
+  const feedUrls = feedsForSection[finalCategory];
   
-  if (!feedUrl) {
+  if (!feedUrls) {
     return NextResponse.json({ error: 'Invalid category' }, { status: 400 });
   }
 
   try {
-    const feed = await parser.parseURL(feedUrl);
-    
-    const itemsWithCategory = feed.items.map(item => ({
-      ...item,
-      category: finalCategory,
-      source: feed.title || '',
-    }));
+    const allItems: (Parser.Item & { category: string; source: string; })[] = [];
 
-    return NextResponse.json(itemsWithCategory);
+    const fetchPromises = (Array.isArray(feedUrls) ? feedUrls : [feedUrls]).map(async (feedUrl) => {
+        try {
+            const feed = await parser.parseURL(feedUrl);
+            const itemsWithCategory = feed.items.map(item => ({
+              ...item,
+              category: finalCategory,
+              source: feed.title || '',
+            }));
+            allItems.push(...itemsWithCategory);
+        } catch (error) {
+            console.error(`Failed to fetch RSS feed from ${feedUrl}:`, error);
+        }
+    });
+
+    await Promise.all(fetchPromises);
+    
+    // Sort all items by date
+    allItems.sort((a, b) => {
+        const dateA = a.isoDate ? new Date(a.isoDate).getTime() : 0;
+        const dateB = b.isoDate ? new Date(b.isoDate).getTime() : 0;
+        return dateB - dateA;
+    });
+
+    return NextResponse.json(allItems);
   } catch (error) {
     console.error(`Failed to fetch RSS feed for ${finalCategory} (${section}/${lang}):`, error);
     return NextResponse.json({ error: `Failed to fetch RSS feed for ${finalCategory}` }, { status: 500 });
