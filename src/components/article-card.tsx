@@ -29,7 +29,7 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
   };
 
   return (
-    <Card className="h-full glass overflow-hidden transition-all duration-300 hover:shadow-primary/20 hover:shadow-lg hover:-translate-y-1 flex flex-col">
+    <Card className="h-full glass overflow-hidden transition-all duration-300 hover:shadow-primary/20 hover:shadow-lg hover:-translate-y-1 flex flex-col shadow-cyan-500/20">
       <a
         href={article.link}
         target="_blank"
