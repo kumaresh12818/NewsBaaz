@@ -26,16 +26,25 @@ export default function MyFeedPage() {
   const [preferences, setPreferences] = useState<{ lang: string, categories: string[] } | null>(null);
 
   const loadAndFetchArticles = useCallback(async () => {
+    // 1. Get preferences from storage.
     const storedPrefs = localStorage.getItem('userPreferences');
     if (!storedPrefs) {
       router.replace('/onboarding');
       return;
     }
-
     const parsedPrefs = JSON.parse(storedPrefs);
     setPreferences(parsedPrefs);
+    
+    // 2. Set language context, this is async and might take a moment to propagate
     handleLanguageChange(parsedPrefs.lang);
 
+    // 3. Check if the current context language matches the preferences language.
+    // If not, it means the context hasn't updated yet. We'll rely on the useEffect below to re-trigger.
+    if (selectedLang !== parsedPrefs.lang) {
+        return;
+    }
+
+    // 4. Proceed with fetching
     if (refreshTrigger === 0) {
       setIsLoading(true);
     } else {
@@ -70,7 +79,7 @@ export default function MyFeedPage() {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, [router, handleLanguageChange, refreshTrigger, toast]);
+  }, [router, handleLanguageChange, refreshTrigger, toast, selectedLang]);
 
   useEffect(() => {
     loadAndFetchArticles();
