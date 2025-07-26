@@ -27,12 +27,6 @@ interface ArticleCardProps {
   lang?: string;
 }
 
-const sentimentColors: { [key: string]: string } = {
-  Positive: 'bg-green-500/20 text-green-400 border-green-500/30',
-  Negative: 'bg-red-500/20 text-red-400 border-red-500/30',
-};
-
-
 export function ArticleCard({ article, lang }: ArticleCardProps) {
   const { isBookmarked, addBookmark, removeBookmark } = useBookmark();
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
@@ -61,7 +55,11 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
 
     setIsLoading(true);
     try {
-      const result = await summarizeArticle({ articleContent: article.content || article.summary });
+      const contentToSummarize = article.content || article.summary;
+      if (!contentToSummarize || contentToSummarize === 'No content available.') {
+        throw new Error('No content available to summarize.');
+      }
+      const result = await summarizeArticle({ articleContent: contentToSummarize });
       setAnalysis(result);
     } catch (error) {
       console.error('AI analysis failed:', error);
@@ -140,14 +138,7 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
         <DialogContent className="glass">
           <DialogHeader>
             <DialogTitle className="flex justify-between items-start">
-              <span className='max-w-xs'>AI Summary & Analysis</span>
-              {analysis && (
-                <Badge
-                  className={cn('text-sm font-bold', sentimentColors[analysis.sentiment] || sentimentColors.Negative)}
-                >
-                  {analysis.sentiment}
-                </Badge>
-              )}
+              <span className='max-w-xs'>AI Summary</span>
             </DialogTitle>
             <DialogDescription>
               A quick summary of the article "{article.title}".

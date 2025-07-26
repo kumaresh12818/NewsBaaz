@@ -5,18 +5,11 @@ import { summarizeArticle, SummarizeArticleOutput } from '@/ai/flows/summarize-a
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wand2, Loader2 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
 interface ArticleAnalysisProps {
   articleContent: string;
 }
-
-const sentimentColors: { [key: string]: string } = {
-  Positive: 'bg-green-500/20 text-green-400 border-green-500/30',
-  Negative: 'bg-red-500/20 text-red-400 border-red-500/30',
-};
 
 export function ArticleAnalysis({ articleContent }: ArticleAnalysisProps) {
   const [analysis, setAnalysis] = useState<SummarizeArticleOutput | null>(null);
@@ -48,7 +41,7 @@ export function ArticleAnalysis({ articleContent }: ArticleAnalysisProps) {
         {!analysis && !isLoading && (
           <Button onClick={handleAnalysis} disabled={isLoading}>
             <Wand2 className="mr-2 h-4 w-4" />
-            Generate Summary & Sentiment
+            Generate Summary
           </Button>
         )}
 
@@ -66,11 +59,6 @@ export function ArticleAnalysis({ articleContent }: ArticleAnalysisProps) {
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
                 <span>Analysis Results</span>
-                <Badge
-                  className={cn('text-sm font-bold', sentimentColors[analysis.sentiment] || sentimentColors.Negative)}
-                >
-                  {analysis.sentiment}
-                </Badge>
               </CardTitle>
             </CardHeader>
             <CardContent>

@@ -1,11 +1,11 @@
-// Summarizes a news article and determines its sentiment.
+// Summarizes a news article.
 
 'use server';
 
 /**
- * @fileOverview Summarizes a news article and determines its sentiment.
+ * @fileOverview Summarizes a news article.
  *
- * - summarizeArticle - A function that summarizes a news article and determines its sentiment.
+ * - summarizeArticle - A function that summarizes a news article.
  * - SummarizeArticleInput - The input type for the summarizeArticle function.
  * - SummarizeArticleOutput - The return type for the summarizeArticle function.
  */
@@ -22,9 +22,6 @@ export type SummarizeArticleInput = z.infer<typeof SummarizeArticleInputSchema>;
 
 const SummarizeArticleOutputSchema = z.object({
   summary: z.string().describe('A concise summary of the article.'),
-  sentiment: z
-    .string()
-    .describe('The sentiment of the article (e.g., positive, negative).'),
 });
 export type SummarizeArticleOutput = z.infer<typeof SummarizeArticleOutputSchema>;
 
@@ -36,13 +33,12 @@ const summarizeArticlePrompt = ai.definePrompt({
   name: 'summarizeArticlePrompt',
   input: {schema: SummarizeArticleInputSchema},
   output: {schema: SummarizeArticleOutputSchema},
-  prompt: `You are a news article summarizer. Summarize the following article in a concise manner, and determine the sentiment of the article as 'Positive' or 'Negative'.
+  prompt: `You are a news article summarizer. Summarize the following article in a concise manner.
 
 Article:
 {{{articleContent}}}
 
-Summary:
-Sentiment:`,
+Summary:`,
 });
 
 const summarizeArticleFlow = ai.defineFlow(
