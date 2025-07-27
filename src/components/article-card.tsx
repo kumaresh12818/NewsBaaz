@@ -25,9 +25,10 @@ import Link from 'next/link';
 interface ArticleCardProps {
   article: Article;
   lang?: string;
+  displayImage?: boolean;
 }
 
-export function ArticleCard({ article, lang }: ArticleCardProps) {
+export function ArticleCard({ article, lang, displayImage = true }: ArticleCardProps) {
   const { isBookmarked, addBookmark, removeBookmark } = useBookmark();
   const { user } = useUser();
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
@@ -82,16 +83,18 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
     }
   };
 
+  const showImage = displayImage && lang !== 'bn';
+
   return (
     <>
       <Card className="h-full glass overflow-hidden transition-all duration-300 hover:shadow-primary/20 hover:shadow-2xl hover:-translate-y-1 flex flex-col shadow-lg shadow-cyan-500/50">
-        <a
-          href={article.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative block"
-        >
-          {lang !== 'bn' && (
+        {showImage && (
+          <a
+            href={article.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative block"
+          >
             <CardHeader className="p-0">
               <div className="relative h-48 w-full">
                 <Image
@@ -103,8 +106,8 @@ export function ArticleCard({ article, lang }: ArticleCardProps) {
                 />
               </div>
             </CardHeader>
-          )}
-        </a>
+          </a>
+        )}
         <CardContent className="p-4 space-y-2 flex-grow flex flex-col justify-between">
           <a
               href={article.link}

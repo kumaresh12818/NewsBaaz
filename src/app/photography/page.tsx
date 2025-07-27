@@ -78,7 +78,7 @@ export default function PhotographyPage() {
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-8">
               {articles.map((article: Article) => (
-                <ArticleCard key={article.id} article={article} />
+                <ArticleCard key={article.id} article={article} displayImage={true} />
               ))}
             </div>
           )}

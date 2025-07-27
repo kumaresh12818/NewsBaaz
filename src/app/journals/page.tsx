@@ -80,7 +80,7 @@ export default function JournalsPage() {
           ) : (
              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 mt-8">
               {articles.map((article: Article) => (
-                <ArticleCard key={article.id} article={article} lang="en" />
+                <ArticleCard key={article.id} article={article} lang="en" displayImage={false} />
               ))}
             </div>
           )}
