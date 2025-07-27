@@ -24,7 +24,7 @@ export function SidebarNav({ isMobile = false }: { isMobile?: boolean }) {
     <nav className={cn('flex h-full flex-col', isMobile ? 'p-4' : 'p-2')}>
       <div className={cn('flex h-14 items-center', isMobile ? 'justify-start p-4' : 'justify-center p-4 lg:justify-start')}>
         <Link href="/" className="flex items-center gap-2 font-headline text-2xl tracking-wider text-primary">
-          <div className="bg-foreground dark:bg-background rounded-full p-1">
+          <div className="bg-foreground dark:bg-muted rounded-full p-1">
             <Image src="https://i.postimg.cc/zBdV4JGC/Chat-GPT-Image-Jul-26-2025-11-53-49-PM.png" alt="NewsBaaz Logo" width={28} height={28} />
           </div>
           <span className={cn(!isMobile && 'hidden lg:block')}>NewsBaaz</span>

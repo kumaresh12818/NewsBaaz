@@ -51,7 +51,7 @@ export default function SignupPage() {
     <div className="w-full max-w-md">
       <div className="flex justify-center mb-6">
         <Link href="/" className="flex items-center gap-2 font-headline text-3xl tracking-wider text-primary">
-          <div className="bg-foreground dark:bg-background rounded-full p-1">
+          <div className="bg-foreground dark:bg-muted rounded-full p-1">
             <Image src="https://i.postimg.cc/zBdV4JGC/Chat-GPT-Image-Jul-26-2025-11-53-49-PM.png" alt="NewsBaaz Logo" width={32} height={32} />
           </div>
           <span>NewsBaaz</span>
