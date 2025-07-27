@@ -67,7 +67,7 @@ export default function JournalsPage() {
             </div>
           </div>
           {isLoading ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-8">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 mt-8">
               {Array.from({ length: 12 }).map((_, i) => (
                 <div key={i} className="space-y-4">
                   <Skeleton className="h-48 w-full" />
@@ -80,7 +80,7 @@ export default function JournalsPage() {
           ) : (
              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 mt-8">
               {articles.map((article: Article) => (
-                <ArticleCard key={article.id} article={article} />
+                <ArticleCard key={article.id} article={article} lang="en" />
               ))}
             </div>
           )}
