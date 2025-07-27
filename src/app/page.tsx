@@ -11,8 +11,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useLanguage } from '@/context/language-context';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+const newsCategories = {
+  en: [
+    'Top Stories', 'Recent Stories', 'India', 'KOLKATA', 'World', 'Business', 
+    'Sports', 'Cricket', 'Science', 'Technology', 'Education', 'Entertainment', 'Astrology'
+  ],
+  bn: [
+    'India News', 'District News', 'Kolkata', 'States', 'World News', 
+    'Sports', 'ENTERTAINMENT', 'Astro', 'Business'
+  ]
+};
 
 export default function Home() {
   const { selectedLang } = useLanguage();
@@ -21,6 +31,14 @@ export default function Home() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const { toast } = useToast();
+  
+  const categories = useMemo(() => newsCategories[selectedLang as 'en' | 'bn'], [selectedLang]);
+  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+
+  // Reset category when language changes
+  useEffect(() => {
+    setSelectedCategory(categories[0]);
+  }, [categories]);
 
   useEffect(() => {
     const getArticles = async () => {
@@ -31,8 +49,7 @@ export default function Home() {
       }
 
       try {
-        const categoryToFetch = selectedLang === 'bn' ? 'India News' : 'Top Stories';
-        const fetchedArticles = await fetchArticles(categoryToFetch, selectedLang, 'news');
+        const fetchedArticles = await fetchArticles(selectedCategory, selectedLang, 'news');
         setArticles(fetchedArticles);
         if (refreshTrigger > 0) {
           toast({ title: "Feed updated!" });
@@ -49,7 +66,7 @@ export default function Home() {
 
     getArticles();
     
-  }, [selectedLang, refreshTrigger, toast]);
+  }, [selectedLang, selectedCategory, refreshTrigger, toast]);
 
   const handleRefresh = () => {
     setRefreshTrigger(t => t + 1);
@@ -58,15 +75,29 @@ export default function Home() {
   return (
     <AppLayout>
       <div className="flex-1 space-y-8 p-4 md:p-8">
-        <div className="container max-w-3xl mx-auto">
-          <div className="flex items-center justify-between">
+        <div className="container mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
             <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-primary flex items-center gap-3 glass rounded-lg px-4 py-2 shadow-lg shadow-cyan-500/50">
-              News Feed
+              {selectedCategory}
             </h1>
-            <Button variant="outline" onClick={handleRefresh} disabled={isRefreshing} className="px-4 py-2 glass shadow-lg shadow-cyan-500/50">
-              <RefreshCw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
-              <span className="ml-2 hidden sm:inline">Refresh</span>
-            </Button>
+            <div className="flex w-full md:w-auto items-center space-x-2">
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-full md:w-[180px] glass">
+                  <SelectValue placeholder="Select a category" />
+                </SelectTrigger>
+                <SelectContent className='glass'>
+                  {categories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+               <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing} className='glass shadow-lg shadow-cyan-500/50'>
+                <RefreshCw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
+                <span className="sr-only">Refresh News</span>
+              </Button>
+            </div>
           </div>
           {isLoading ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8">
