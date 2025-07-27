@@ -82,7 +82,7 @@ export default function Home() {
             </h1>
             <div className="flex w-full md:w-auto items-center space-x-2">
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-full md:w-[180px] glass">
+                <SelectTrigger className="w-full md:w-[180px] glass shadow-lg shadow-cyan-500/50">
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent className='glass'>
