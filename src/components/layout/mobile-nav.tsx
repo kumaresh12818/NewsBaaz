@@ -3,12 +3,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Bookmark, Settings, Camera } from 'lucide-react';
+import { Home, Bookmark, Settings, Camera, BookText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/', label: 'News', icon: Home },
   { href: '/photography', label: 'Photography', icon: Camera },
+  { href: '/journals', label: 'Journals', icon: BookText },
   { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark },
   { href: '/settings', label: 'Settings', icon: Settings },
 ];
@@ -18,7 +19,7 @@ export function MobileNav() {
 
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 border-t glass z-20">
-      <div className="grid h-full max-w-lg grid-cols-4 mx-auto">
+      <div className="grid h-full max-w-lg grid-cols-5 mx-auto">
         {navItems.map((item) => (
           <Link
             key={item.href}

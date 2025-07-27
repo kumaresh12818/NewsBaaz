@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Bookmark, Settings, LogIn, Camera } from 'lucide-react';
+import { Home, Bookmark, Settings, LogIn, Camera, BookText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -12,6 +12,7 @@ import Image from 'next/image';
 const navItems = [
   { href: '/', label: 'News', icon: Home },
   { href: '/photography', label: 'Photography', icon: Camera },
+  { href: '/journals', label: 'Journals', icon: BookText },
   { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark },
   { href: '/settings', label: 'Settings', icon: Settings },
 ];
