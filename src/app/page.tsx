@@ -38,7 +38,7 @@ export default function Home() {
   // Reset category when language changes
   useEffect(() => {
     setSelectedCategory(categories[0]);
-  }, [categories]);
+  }, [selectedLang, categories]);
 
   useEffect(() => {
     const getArticles = async () => {
@@ -100,7 +100,7 @@ export default function Home() {
             </div>
           </div>
           {isLoading ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-8">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 mt-8">
               {Array.from({ length: 8 }).map((_, i) => (
                 <div key={i} className="space-y-4">
                   <Skeleton className="h-48 w-full" />
