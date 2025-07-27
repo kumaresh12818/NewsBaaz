@@ -73,6 +73,18 @@ function cleanTitle(title: string): string {
   return title.replace(/recent uploads tagged nature/i, '').trim();
 }
 
+function getImageHint(section: string): string {
+  switch (section) {
+    case 'photography':
+      return 'photography camera';
+    case 'journals':
+      return 'science abstract';
+    case 'news':
+    default:
+      return 'news article';
+  }
+}
+
 export async function fetchArticles(
   category: string,
   lang: string = 'en',
@@ -103,7 +115,7 @@ export async function fetchArticles(
         publishedAt: item.isoDate || new Date().toISOString(),
         category: item.category,
         imageUrl: imageUrl,
-        imageHint: section === 'photography' ? 'photography camera' : 'news article',
+        imageHint: getImageHint(section),
         content: item.contentSnippet || item.content || 'No content available.',
         summary: cleanSummary,
         sentiment: 'Positive', // Placeholder sentiment

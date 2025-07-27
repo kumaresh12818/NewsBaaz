@@ -88,6 +88,46 @@ const rssFeeds: { [key: string]: { [category: string]: string | string[] } } = {
         'https://streetphotographymagazine.com/feed/',
       ]
     }
+  },
+  journals: {
+    en: {
+        'ALL': [
+            'https://www.science.org/action/showFeed?type=etoc&feed=rss&jc=science',
+            'https://www.pnas.org/rss/current.xml',
+            'https://www.nature.com/nphys.rss',
+            'https://journals.aps.org/prl/rss/current.xml',
+            'https://ieeexplore.ieee.org/rss/TOC85.XML',
+            'https://epjquantumtechnology.springeropen.com/articles/rss.xml',
+            'https://www.sciencedirect.com/journal/physics-reports/rss',
+            'https://www.nature.com/nature.rss',
+            'https://link.springer.com/search.rss?facet-journal-id=146',
+            'http://feeds.plos.org/plosone/LatestArticles',
+            'http://export.arxiv.org/rss/physics',
+            'http://export.arxiv.org/rss/cs.AI',
+            'https://dl.acm.org/action/showFeed?type=etoc&feed=rss&jc=TOG',
+            'https://www.edutopia.org/rss.xml',
+            'https://www.sciencedaily.com/rss/',
+        ]
+    },
+    bn: {
+        'ALL': [
+            'https://www.science.org/action/showFeed?type=etoc&feed=rss&jc=science',
+            'https://www.pnas.org/rss/current.xml',
+            'https://www.nature.com/nphys.rss',
+            'https://journals.aps.org/prl/rss/current.xml',
+            'https://ieeexplore.ieee.org/rss/TOC85.XML',
+            'https://epjquantumtechnology.springeropen.com/articles/rss.xml',
+            'https://www.sciencedirect.com/journal/physics-reports/rss',
+            'https://www.nature.com/nature.rss',
+            'https://link.springer.com/search.rss?facet-journal-id=146',
+            'http://feeds.plos.org/plosone/LatestArticles',
+            'http://export.arxiv.org/rss/physics',
+            'http://export.arxiv.org/rss/cs.AI',
+            'https://dl.acm.org/action/showFeed?type=etoc&feed=rss&jc=TOG',
+            'https://www.edutopia.org/rss.xml',
+            'https://www.sciencedaily.com/rss/',
+        ]
+    }
   }
 };
 
