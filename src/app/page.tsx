@@ -35,13 +35,22 @@ export default function Home() {
   const categories = useMemo(() => newsCategories[selectedLang as 'en' | 'bn'], [selectedLang]);
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 
-  // Reset category when language changes
+  // When language changes, update the category to the first available one for the new language.
   useEffect(() => {
-    setSelectedCategory(newsCategories[selectedLang as 'en' | 'bn'][0]);
+    const newDefaultCategory = newsCategories[selectedLang as 'en' | 'bn'][0];
+    setSelectedCategory(newDefaultCategory);
   }, [selectedLang]);
 
   useEffect(() => {
     const getArticles = async () => {
+      // Ensure the category is valid for the current language before fetching
+      const currentCategories = newsCategories[selectedLang as 'en' | 'bn'];
+      if (!currentCategories.includes(selectedCategory)) {
+        // If not, it means the state hasn't updated yet. We can either wait or just not fetch.
+        // Let's not fetch to prevent the error. The category change effect will trigger a re-render and a new fetch.
+        return;
+      }
+
       if (refreshTrigger === 0) {
         setIsLoading(true);
       } else {
