@@ -44,84 +44,91 @@ export function AppHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/60 px-4 backdrop-blur-lg md:px-6">
-      <div className="md:hidden">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon">
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle navigation menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="glass p-0">
-             <SheetHeader className='p-4'>
-               <SheetTitle className='sr-only'>Mobile Navigation Menu</SheetTitle>
-            </SheetHeader>
-            <SidebarNav isMobile={true} />
-          </SheetContent>
-        </Sheet>
-      </div>
-      
-      <div className="hidden md:flex flex-1 items-center">
-        <Link href="/" className="flex items-center gap-2 font-headline text-2xl tracking-wider text-primary">
-          <div className="bg-foreground dark:bg-background rounded-full p-1">
-            <Image src="https://i.postimg.cc/zBdV4JGC/Chat-GPT-Image-Jul-26-2025-11-53-49-PM.png" alt="NewsBaaz Logo" width={28} height={28} />
+    <header className="sticky top-0 z-10 flex h-16 items-center border-b bg-background/60 px-4 backdrop-blur-lg">
+      <div className="grid grid-cols-3 items-center w-full">
+        {/* Left section */}
+        <div className="flex justify-start items-center">
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Toggle navigation menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="glass p-0">
+                <SheetHeader className='p-4'>
+                  <SheetTitle className='sr-only'>Mobile Navigation Menu</SheetTitle>
+                </SheetHeader>
+                <SidebarNav isMobile={true} />
+              </SheetContent>
+            </Sheet>
           </div>
-          <span>NewsBaaz</span>
-        </Link>
-      </div>
-      
-      <div className="flex w-full items-center justify-end gap-4">
-        <ThemeToggle />
-        {!isPhotographyPage && (
-          <Button variant="outline" size="icon" onClick={toggleLanguage}>
-            <Globe className="h-5 w-5" />
-            <span className="sr-only">Toggle Language</span>
-          </Button>
-        )}
+        </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="secondary" size="icon" className="rounded-full">
-              <Avatar>
-                {user ? (
-                  <>
-                    <AvatarImage src={user.avatarUrl} alt={user.name} />
-                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-                  </>
-                ) : (
-                  <AvatarFallback>G</AvatarFallback>
-                )}
-              </Avatar>
-              <span className="sr-only">Toggle user menu</span>
+        {/* Center section */}
+        <div className="flex justify-center">
+          <Link href="/" className="flex items-center gap-2 font-headline text-2xl tracking-wider text-primary">
+            <div className="bg-foreground dark:bg-background rounded-full p-1">
+              <Image src="https://i.postimg.cc/zBdV4JGC/Chat-GPT-Image-Jul-26-2025-11-53-49-PM.png" alt="NewsBaaz Logo" width={28} height={28} />
+            </div>
+            <span className="hidden md:inline">NewsBaaz</span>
+          </Link>
+        </div>
+
+        {/* Right section */}
+        <div className="flex items-center justify-end gap-2 md:gap-4">
+          <ThemeToggle />
+          {!isPhotographyPage && (
+            <Button variant="outline" size="icon" onClick={toggleLanguage}>
+              <Globe className="h-5 w-5" />
+              <span className="sr-only">Toggle Language</span>
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {user ? (
-              <>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/settings">Settings</Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Logout
-                </DropdownMenuItem>
-              </>
-            ) : (
-              <>
-                <DropdownMenuItem asChild>
-                  <Link href="/login">Login</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/signup">Sign Up</Link>
-                </DropdownMenuItem>
-              </>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
+          )}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" size="icon" className="rounded-full">
+                <Avatar>
+                  {user ? (
+                    <>
+                      <AvatarImage src={user.avatarUrl} alt={user.name} />
+                      <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                    </>
+                  ) : (
+                    <AvatarFallback>G</AvatarFallback>
+                  )}
+                </Avatar>
+                <span className="sr-only">Toggle user menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {user ? (
+                <>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/settings">Settings</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <>
+                  <DropdownMenuItem asChild>
+                    <Link href="/login">Login</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/signup">Sign Up</Link>
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
     </header>
   );
