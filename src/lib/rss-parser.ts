@@ -3,17 +3,30 @@ import type { Article } from './types';
 import type { Item } from 'rss-parser';
 
 function extractImageUrl(content: string, item: any, source: string): string {
-  const checkUrl = (url: string) => (url && !url.endsWith('.swf') && !url.endsWith('.mp3') ? url : null);
+  const checkUrl = (url: string) => (url && url.startsWith('http') && !url.endsWith('.swf') && !url.endsWith('.mp3') ? url : null);
 
-  let imageUrl = checkUrl(item.enclosure?.url);
+  let imageUrl: string | null = null;
+  
+  // Highest priority: media:content with medium="image"
+  if (Array.isArray(item['media:content'])) {
+      const imageMedia = item['media:content'].find((media: any) => media['$']?.medium === 'image' && media['$']?.url);
+      imageUrl = checkUrl(imageMedia?.['$']?.url);
+  } else {
+      imageUrl = checkUrl(item['media:content']?.['$']?.url);
+  }
   if (imageUrl) return imageUrl;
 
-  imageUrl = checkUrl(item['media:content']?.['$']?.url);
-  if (imageUrl) return imageUrl;
-
+  // Next priority: enclosure with a valid image type
+  if (item.enclosure && item.enclosure.url && item.enclosure.type?.startsWith('image')) {
+    imageUrl = checkUrl(item.enclosure.url);
+    if (imageUrl) return imageUrl;
+  }
+  
+  // Next priority: media:thumbnail
   imageUrl = checkUrl(item['media:thumbnail']?.['$']?.url);
   if (imageUrl) return imageUrl;
   
+  // Fallback: Parsing from content string
   if (item.content) {
     const imgRegex = /<img[^>]+src="([^">]+)"/;
     const match = item.content.match(imgRegex);
@@ -23,7 +36,7 @@ function extractImageUrl(content: string, item: any, source: string): string {
     }
   }
 
-  // ABP live specific
+  // Source-specific parsing
   if (source === 'ABP Live' && content) {
     const imgRegex = /<img[^>]+src="([^">]+)"/;
     const match = content.match(imgRegex);
@@ -33,7 +46,6 @@ function extractImageUrl(content: string, item: any, source: string): string {
     }
   }
 
-  // Hindustan Times Bangla
   if (source === 'Hindustan Times' && content) {
     const imgRegex = /<img[^>]+src="([^">]+)"/;
     const match = content.match(imgRegex);
@@ -52,7 +64,7 @@ function extractImageUrl(content: string, item: any, source: string): string {
     }
   }
 
-
+  // Final fallback to placeholder
   return 'https://placehold.co/600x400.png';
 }
 
@@ -70,7 +82,7 @@ function cleanSource(source: string): string {
 }
 
 function cleanTitle(title: string): string {
-  return title.replace(/recent uploads tagged nature/i, '').trim();
+  return title.replace(/recent uploads tagged nature/i, '').replace(/recent uploads tagged landscape/i, '').replace(/recent uploads tagged city/i, '').trim();
 }
 
 function getImageHint(section: string): string {

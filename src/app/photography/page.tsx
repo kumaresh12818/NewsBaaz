@@ -10,8 +10,10 @@ import { fetchArticles } from '@/lib/rss-parser';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/context/language-context';
 
 export default function PhotographyPage() {
+  const { selectedLang } = useLanguage();
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -27,7 +29,7 @@ export default function PhotographyPage() {
       }
 
       try {
-        const fetchedArticles = await fetchArticles('ALL', 'en', 'photography');
+        const fetchedArticles = await fetchArticles('ALL', selectedLang, 'photography');
         setArticles(fetchedArticles);
         if (refreshTrigger > 0) {
           toast({ title: "Feed updated!" });
@@ -44,7 +46,7 @@ export default function PhotographyPage() {
 
     getArticles();
     
-  }, [refreshTrigger, toast]);
+  }, [refreshTrigger, toast, selectedLang]);
 
   const handleRefresh = () => {
     setRefreshTrigger(t => t + 1);

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Globe, Menu, LogOut } from 'lucide-react';
+import { Globe, Menu, LogOut, Camera } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -30,7 +30,9 @@ export function AppHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const { toast } = useToast();
-  const isPhotographyPage = pathname === '/photography';
+  
+  const pagesWithoutLanguageToggle = ['/photography', '/journals'];
+  const showLanguageToggle = !pagesWithoutLanguageToggle.includes(pathname);
 
   const toggleLanguage = () => {
     const newLang = selectedLang === 'en' ? 'bn' : 'en';
@@ -79,7 +81,7 @@ export function AppHeader() {
         {/* Right section */}
         <div className="flex items-center justify-end gap-2 md:gap-4">
           <ThemeToggle />
-          {!isPhotographyPage && (
+          {showLanguageToggle && (
             <Button variant="outline" size="icon" onClick={toggleLanguage}>
               <Globe className="h-5 w-5" />
               <span className="sr-only">Toggle Language</span>
