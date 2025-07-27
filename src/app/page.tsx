@@ -37,8 +37,8 @@ export default function Home() {
 
   // Reset category when language changes
   useEffect(() => {
-    setSelectedCategory(categories[0]);
-  }, [selectedLang, categories]);
+    setSelectedCategory(newsCategories[selectedLang as 'en' | 'bn'][0]);
+  }, [selectedLang]);
 
   useEffect(() => {
     const getArticles = async () => {
