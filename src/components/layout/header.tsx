@@ -64,7 +64,9 @@ export function AppHeader() {
       
       <div className="hidden md:flex flex-1 items-center">
         <Link href="/" className="flex items-center gap-2 font-headline text-2xl tracking-wider text-primary">
-          <Image src="https://i.postimg.cc/zBdV4JGC/Chat-GPT-Image-Jul-26-2025-11-53-49-PM.png" alt="NewsBaaz Logo" width={28} height={28} />
+          <div className="bg-foreground dark:bg-background rounded-full p-1">
+            <Image src="https://i.postimg.cc/zBdV4JGC/Chat-GPT-Image-Jul-26-2025-11-53-49-PM.png" alt="NewsBaaz Logo" width={28} height={28} />
+          </div>
           <span>NewsBaaz</span>
         </Link>
       </div>
