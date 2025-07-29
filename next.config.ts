@@ -241,6 +241,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: '2.img-dpreview.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'zeenews.india.com',
         port: '',
         pathname: '/**',
