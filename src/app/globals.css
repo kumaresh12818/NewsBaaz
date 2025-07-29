@@ -75,4 +75,25 @@ body {
   .glass {
     @apply bg-card/60 backdrop-blur-lg border border-white/10;
   }
+  .color-spinner {
+    @apply w-12 h-12 rounded-full;
+    animation: color-spinner-anim 1.2s linear infinite;
+    background-image: conic-gradient(
+      hsl(var(--chart-1)),
+      hsl(var(--chart-2)),
+      hsl(var(--chart-3)),
+      hsl(var(--chart-4)),
+      hsl(var(--chart-5)),
+      hsl(var(--chart-1))
+    );
+  }
+  
+  @keyframes color-spinner-anim {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 }

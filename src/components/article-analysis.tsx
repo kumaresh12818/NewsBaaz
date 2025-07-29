@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { summarizeArticle, SummarizeArticleOutput } from '@/ai/flows/summarize-article';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Wand2, Loader2 } from 'lucide-react';
+import { Wand2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
 
@@ -41,27 +41,32 @@ export function ArticleAnalysis({ articleContent }: ArticleAnalysisProps) {
     <section className="space-y-6">
       <h2 className="font-headline text-3xl tracking-wider text-primary">AI Analysis</h2>
       <div className="flex flex-col items-start gap-4">
-        {!analysis && !isLoading && (
-          <Button onClick={handleAnalysis} disabled={isLoading}>
-            <Wand2 className="mr-2 h-4 w-4" />
-            Generate Summary
-          </Button>
-        )}
-
-        {isLoading && (
-          <div className="flex items-center justify-center w-full rounded-lg border-2 border-dashed border-border h-32">
-            <div className="flex items-center space-x-2 text-muted-foreground">
-              <Loader2 className="h-6 w-6 animate-spin" />
-              <span className="font-medium">Analyzing article...</span>
-            </div>
+        {!analysis && (
+          <div className="relative">
+            <Button onClick={handleAnalysis} disabled={isLoading}>
+              <Wand2 className="mr-2 h-4 w-4" />
+              Generate Summary
+            </Button>
+            {isLoading && (
+               <div className="absolute -left-2 -top-2 -z-10">
+                 <div className="relative flex h-14 w-[10.5rem] items-center justify-center">
+                    <div className="color-spinner"></div>
+                    <div className="absolute inset-0.5 rounded-full bg-background"></div>
+                 </div>
+               </div>
+            )}
           </div>
         )}
 
-        {analysis && (
+        {analysis && !isLoading && (
           <Card className="w-full glass">
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
                 <span>Analysis Results</span>
+                 <Button variant="ghost" size="sm" onClick={handleAnalysis} disabled={isLoading}>
+                    <Wand2 className="mr-2 h-4 w-4" />
+                    Regenerate
+                  </Button>
               </CardTitle>
             </CardHeader>
             <CardContent>
