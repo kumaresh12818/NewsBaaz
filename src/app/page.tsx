@@ -103,13 +103,13 @@ export default function Home() {
                   ))}
                 </SelectContent>
               </Select>
-               <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing} className='glass shadow-lg shadow-cyan-500/50'>
-                <RefreshCw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
+               <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing || isLoading} className='glass shadow-lg shadow-cyan-500/50'>
+                <RefreshCw className={`h-5 w-5 ${(isRefreshing || isLoading) ? 'animate-spin' : ''}`} />
                 <span className="sr-only">Refresh News</span>
               </Button>
             </div>
           </div>
-          {isLoading ? (
+          {(isLoading || isRefreshing) ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 mt-8">
               {Array.from({ length: 8 }).map((_, i) => (
                 <div key={i} className="space-y-4">
