@@ -20,7 +20,8 @@ const newsCategories = {
   ],
   bn: [
     'India News', 'District News', 'Kolkata', 'States', 'World News', 
-    'Sports', 'ENTERTAINMENT', 'Astro', 'Business', 'Fact Check', 'Health', 'Trending', 'Election'
+    'Sports', 'ENTERTAINMENT', 'Astro', 'Business', 'Fact Check', 'Health', 'Trending', 'Election',
+    'জাতি', 'বিশ্ব', 'কলকাতা', 'জেলা', 'খেলাধুলা', 'বিনোদন', 'ব্লগ', 'স্বাস্থ্য', 'লাইফস্টাইল'
   ]
 };
 

@@ -35,6 +35,15 @@ const rssFeeds: { [key: string]: { [category: string]: string | string[] } } = {
       'Health': 'https://bengali.abplive.com/health/feed',
       'Trending': 'https://bengali.abplive.com/trending/feed',
       'Election': 'https://bengali.abplive.com/elections/feed',
+      'জাতি': 'http://zeenews.india.com/bengali/rssfeed/nation.xml',
+      'বিশ্ব': 'http://zeenews.india.com/bengali/rssfeed/world.xml',
+      'কলকাতা': 'http://zeenews.india.com/bengali/rssfeed/kolkata.xml',
+      'জেলা': 'http://zeenews.india.com/bengali/rssfeed/zila.xml',
+      'খেলাধুলা': 'http://zeenews.india.com/bengali/rssfeed/sports.xml',
+      'বিনোদন': 'http://zeenews.india.com/bengali/rssfeed/entertainment.xml',
+      'ব্লগ': 'http://zeenews.india.com/bengali/blog.xml',
+      'স্বাস্থ্য': 'http://zeenews.india.com/bengali/health.xml',
+      'লাইফস্টাইল': 'http://zeenews.india.com/bengali/lifestyle.xml'
     }
   },
   photography: {

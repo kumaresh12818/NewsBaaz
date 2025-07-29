@@ -232,6 +232,24 @@ const nextConfig: NextConfig = {
         hostname: 'i.postimg.cc',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '4.img-dpreview.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'zeenews.india.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'zeenews.india.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
