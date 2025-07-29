@@ -116,7 +116,8 @@ export async function fetchArticles(
       const imageUrl = extractImageUrl(item.content || '', item, item.source);
       const summary = item.contentSnippet || 'No summary available.';
       const cleanSummary = summary.replace(/<[^>]*>?/gm, '');
-      const id = item.guid || item.link || `${item.title}-${index}`;
+      const originalId = item.guid || item.link || `${item.title}-${index}`;
+      const id = `${item.source}-${originalId}`;
 
       return {
         id: id,
