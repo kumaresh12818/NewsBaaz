@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -42,20 +43,27 @@ export function ArticleAnalysis({ articleContent }: ArticleAnalysisProps) {
       <h2 className="font-headline text-3xl tracking-wider text-primary">AI Analysis</h2>
       <div className="flex flex-col items-start gap-4">
         {!analysis && (
-          <div className="relative">
+          <div className="relative mt-2 ml-2">
             <Button onClick={handleAnalysis} disabled={isLoading}>
               <Wand2 className="mr-2 h-4 w-4" />
-              Generate Summary
+              {isLoading ? 'Generating...' : 'Generate Summary'}
             </Button>
-            {isLoading && (
-               <div className="absolute -left-2 -top-2 -z-10">
-                 <div className="relative flex h-14 w-[10.5rem] items-center justify-center">
-                    <div className="color-spinner"></div>
-                    <div className="absolute inset-0.5 rounded-full bg-background"></div>
-                 </div>
-               </div>
-            )}
+            <div className="absolute -left-2 -top-2 -z-10">
+              <div className="relative flex h-14 w-[10.5rem] items-center justify-center">
+                <div className="color-spinner"></div>
+                <div className="absolute inset-0.5 rounded-full bg-background"></div>
+              </div>
+            </div>
           </div>
+        )}
+
+        {isLoading && analysis && (
+           <div className="relative mt-2 ml-2">
+             <div className="relative flex h-14 w-[10.5rem] items-center justify-center">
+                <div className="color-spinner"></div>
+                <div className="absolute inset-0.5 rounded-full bg-background"></div>
+             </div>
+           </div>
         )}
 
         {analysis && !isLoading && (
