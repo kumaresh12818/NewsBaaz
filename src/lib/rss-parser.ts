@@ -7,7 +7,6 @@ function extractImageUrl(content: string, item: any, source: string): string {
 
   let imageUrl: string | null = null;
   
-  // Highest priority: media:content with medium="image"
   if (Array.isArray(item['media:content'])) {
       const imageMedia = item['media:content'].find((media: any) => media['$']?.medium === 'image' && media['$']?.url);
       imageUrl = checkUrl(imageMedia?.['$']?.url);
@@ -16,17 +15,14 @@ function extractImageUrl(content: string, item: any, source: string): string {
   }
   if (imageUrl) return imageUrl;
 
-  // Next priority: enclosure with a valid image type
   if (item.enclosure && item.enclosure.url && item.enclosure.type?.startsWith('image')) {
     imageUrl = checkUrl(item.enclosure.url);
     if (imageUrl) return imageUrl;
   }
   
-  // Next priority: media:thumbnail
   imageUrl = checkUrl(item['media:thumbnail']?.['$']?.url);
   if (imageUrl) return imageUrl;
   
-  // Fallback: Parsing from content string
   if (item.content) {
     const imgRegex = /<img[^>]+src="([^">]+)"/;
     const match = item.content.match(imgRegex);
@@ -36,7 +32,6 @@ function extractImageUrl(content: string, item: any, source: string): string {
     }
   }
 
-  // Source-specific parsing
   if (source === 'ABP Live' && content) {
     const imgRegex = /<img[^>]+src="([^">]+)"/;
     const match = content.match(imgRegex);
@@ -64,7 +59,6 @@ function extractImageUrl(content: string, item: any, source: string): string {
     }
   }
 
-  // Final fallback to placeholder
   return 'https://placehold.co/600x400.png';
 }
 
@@ -100,7 +94,7 @@ function getImageHint(section: string): string {
 export async function fetchArticles(
   category: string,
   lang: string = 'en',
-  section: string = 'news'
+  section: 'news' | 'photography' | 'journals'
 ): Promise<Article[]> {
   try {
     const response = await fetch(
@@ -127,11 +121,12 @@ export async function fetchArticles(
         source: cleanSource(item.source || ''),
         publishedAt: item.isoDate || new Date().toISOString(),
         category: item.category,
+        section: section,
         imageUrl: imageUrl,
         imageHint: getImageHint(section),
         content: item.contentSnippet || item.content || 'No content available.',
         summary: cleanSummary,
-        sentiment: 'Positive', // Placeholder sentiment
+        sentiment: 'Positive', 
         link: item.link || '#',
       };
     });

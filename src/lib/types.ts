@@ -6,6 +6,7 @@ export type Article = {
   source: string;
   publishedAt: string;
   category: string;
+  section: 'news' | 'photography' | 'journals';
   imageUrl: string;
   imageHint: string;
   content: string;
