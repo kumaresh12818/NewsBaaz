@@ -27,10 +27,14 @@ const rssFeeds: { [key: string]: { [category: string]: string | string[] } } = {
       'Kolkata': 'https://bengali.abplive.com/news/kolkata/feed',
       'States': 'https://bengali.abplive.com/states/feed',
       'World News': 'https://bengali.abplive.com/news/world/feed',
-      'Sports': 'https://bengali.abplive.com/sports/feed',
+      'Sports': 'https://bengali.abplive.com/sports/ipl/feed',
       'ENTERTAINMENT': 'https://bengali.abplive.com/entertainment/feed',
       'Astro': 'https://bengali.abplive.com/astro/feed',
       'Business': 'https://bengali.abplive.com/business/feed',
+      'Fact Check': 'https://bengali.abplive.com/fact-check/feed',
+      'Health': 'https://bengali.abplive.com/health/feed',
+      'Trending': 'https://bengali.abplive.com/trending/feed',
+      'Election': 'https://bengali.abplive.com/elections/feed',
     }
   },
   photography: {
@@ -47,6 +51,9 @@ const rssFeeds: { [key: string]: { [category: string]: string | string[] } } = {
         'https://www.lensculture.com/feed.rss',
         'https://thephotographersgallery.org.uk/photography-stories/feed',
         'https://www.dpreview.com/feeds/gallery.rss',
+        'https://www.nationalgeographic.com/photography/photo-of-the-day/_jcr_content/.feed',
+        'https://www.dpreview.com/feeds/news.xml',
+        'https://www.dpreview.com/feeds/reviews.xml'
       ]
     },
     bn: {

@@ -20,7 +20,7 @@ const newsCategories = {
   ],
   bn: [
     'India News', 'District News', 'Kolkata', 'States', 'World News', 
-    'Sports', 'ENTERTAINMENT', 'Astro', 'Business'
+    'Sports', 'ENTERTAINMENT', 'Astro', 'Business', 'Fact Check', 'Health', 'Trending', 'Election'
   ]
 };
 
