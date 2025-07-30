@@ -87,7 +87,7 @@ export default function Home() {
       <div className="flex-1 space-y-8 p-4 md:p-8">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-            <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-primary flex items-center gap-3 glass rounded-lg px-4 py-2 shadow-lg shadow-cyan-500/50">
+            <h1 className="text-4xl md:text-5xl font-headline tracking-wider text-foreground flex items-center gap-3 glass rounded-lg px-4 py-2 shadow-lg shadow-cyan-500/50">
               {selectedCategory}
             </h1>
             <div className="flex w-full md:w-auto items-center space-x-2">
